@@ -584,7 +584,7 @@ function makeCard(s) {
          data-sort-price="${getSortValue(s, 'price')}" data-sort-traffic="${getSortValue(s, 'traffic')}" data-sort-speed="${getSortValue(s, 'speed')}">
       <div class="card-header">
         <div>
-          <div class="card-name">${s.name}</div>
+          <div class="card-name">${s.url ? `<a href="${getServiceUrl(s)}" target="_blank" style="color:inherit;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${s.name}</a>` : s.name}</div>
           <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">${s.nameZh}</div>
         </div>
         <div class="card-badges">${tierBadge}${customBadge}</div>
@@ -652,7 +652,7 @@ function render() {
     const traffic = plan ? plan.traffic : '—';
     return `
     <tr data-search="${(s.name + ' ' + s.nameZh + ' ' + s.desc + ' ' + s.descZh + ' ' + s.protocols.join(' ') + ' ' + s.tags.join(' ') + ' ' + (s.payment || '') + ' ' + (s.speed || '')).toLowerCase()}">
-      <td><b>${s.name}</b><br><small style="color:var(--text-muted)">${s.nameZh}</small></td>
+      <td>${s.url ? `<a href="${getServiceUrl(s)}" target="_blank" style="color:inherit;font-weight:700;text-decoration:none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${s.name}</a>` : `<b>${s.name}</b>`}<br><small style="color:var(--text-muted)">${s.nameZh}</small></td>
       <td>${cheapest}</td>
       <td>${traffic}</td>
       <td>${s.speed || '—'}</td>
