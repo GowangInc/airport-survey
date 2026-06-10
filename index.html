@@ -524,16 +524,12 @@
 
 <main>
 
-  <!-- COMBINED TOP + LEGACY -->
-  <h2 class="section-title"><span class="badge-dot" style="background:var(--badge-top)"></span> Top-Tier &amp; Established</h2>
   <div class="note-box">
     <strong>⚠️ Note:</strong> Prices may have changed since screenshots were taken. WgetCloud &amp; SSRDOG recently removed monthly options. Boost Net raised prices 20% in April 2026. Always verify on the official site before purchasing.
   </div>
+  
   <div class="filter-row" id="combined-filters"></div>
   <div class="cards-grid" id="combined-grid"></div>
-
-  <!-- NEW / TESTING -->
-  <h2 class="section-title"><span class="badge-dot" style="background:var(--badge-new)"></span> New / Testing</h2>
   <div class="filter-row" id="new-filters"></div>
   <div class="cards-grid" id="new-grid"></div>
 
@@ -632,6 +628,7 @@ function makeCard(s) {
 
 function render() {
   const combined = [...top8.map(s => ({...s, tier: 'top'})), ...legacy.map(s => ({...s, tier: 'legacy'}))];
+  const allData = [...combined, ...testing];
   let sortedCombined = [...combined];
   let sortedTesting = [...testing.map(s => ({...s, tier: 'new'}))];
 
