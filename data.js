@@ -92,7 +92,8 @@ var top8 = [
     name: "SSRDOG",
     nameZh: "SSRDOG 机场",
     links: [
-      { label: "Official", url: "https://ssrdog.com" }
+      { label: "Official", url: "https://ssrdog.com" },
+      { label: "Register 💩", url: "https://st2.hosbb.com/#/register?code=8Qkdtrsv" }
     ],
     desc: "IEPL dedicated-line airport since 2022. Custom client. 10Gbps ultra-large bandwidth. Good streaming & ChatGPT unlock.",
     descZh: "IEPL专线机场，2022年运营。定制客户端。10Gbps超大带宽。",
@@ -131,7 +132,8 @@ var top8 = [
     name: "Coffee Cloud",
     nameZh: "Coffee Cloud 咖啡云",
     links: [
-      { label: "Official", url: "https://coffeecloud.net" }
+      { label: "Official", url: "https://coffeecloud.net" },
+      { label: "Register", url: "https://aicoffee.app/#/register?code=TMqcn11s" }
     ],
     desc: "Small relay airport operating for years. Public tunnel relay + some IEPL dedicated-line nodes. Custom V-Ninja client (Windows/Mac/Android/iOS).",
     descZh: "中转小机场，运营多年。公网隧道+少量IEPL专线。定制V-Ninja客户端。",
