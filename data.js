@@ -6,7 +6,7 @@
 // Labels: "Official", "Register", "Client", etc.
 // Add your own referral codes by appending ?code=YOURCODE to register URLs.
 
-const top8 = [
+var top8 = [
   {
     name: "WgetCloud",
     nameZh: "WgetCloud 全球加速",
@@ -153,7 +153,7 @@ const top8 = [
     nameZh: "夜煞云",
     links: [
       { label: "Official", url: "https://www.night-furyx.com" },
-      { label: "Register", url: "https://www.night-furyx.com/#/register?code=365913" }
+      { label: "Register", url: "https://www.night-furyx.com/#/register?code=PIHq6P9J" }
     ],
     desc: "Low-key multi-protocol relay small airport. Also has IPLC dedicated-line nodes. Custom 3-platform client. Pay-as-you-go traffic packs available (no expiry).",
     descZh: "多协议中转小机场，也有IPLC专线节点。定制三端。提供不限时长按量付费流量包。",
@@ -174,7 +174,7 @@ const top8 = [
   }
 ];
 
-const legacy = [
+var legacy = [
   {
     name: "Nexitally",
     nameZh: "奶昔机场",
@@ -624,7 +624,7 @@ const legacy = [
   }
 ];
 
-const testing = [
+var testing = [
   {
     name: "FliggyCloud",
     nameZh: "飞天猫 FliggyCloud",
