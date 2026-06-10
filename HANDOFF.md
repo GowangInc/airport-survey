@@ -2,7 +2,41 @@
 
 **Date:** 2026-06-10  
 **Project:** Airport Survey — VPN / Proxy Service Comparison Page  
-**Source Folder:** `/Users/nicholas/Documents/airport-survey/`
+**Source Folder:** `/Users/nicholas/Library/CloudStorage/GoogleDrive-nicholasjgowan@gmail.com/My Drive/toys/airport-survey/`
+**GitHub:** https://github.com/GowangInc/airport-survey
+**Live Site:** https://gowanginc.github.io/airport-survey/
+
+---
+
+## Current Phase: Service Expansion (2026-06-10)
+
+### Goal
+Expand the comparison by signing up for services that lack pricing data. Many services require login to view plans, so we're creating accounts to capture real pricing.
+
+### Method
+- **Email routing:** Cloudflare catch-all on `entropydrivenmindset.win` domain
+- **Signup email:** `vpn@entropydrivenmindset.win` (catch-all forwards to main inbox)
+- **Tracking:** `signup-tracker.html` — local HTML file with localStorage persistence for tracking signup status and notes
+
+### Source Data
+Scraped from https://9.234456.xyz/abc.html — a Chinese airport directory page with ~60 services. Links were base64-encoded in JavaScript onclick handlers. Extracted, decoded, and cleaned (removed affiliate `?code=` params, filtered out VPN mentions to avoid content flags).
+
+### New Services to Add
+~50 services extracted from the scrape. Priority given to:
+1. Services marked "老牌" (established/old-brand) — more likely to be stable
+2. Services with IEPL/IPLC badges — premium dedicated lines
+3. Services offering free trials — easier to verify
+
+### Files Added
+- `signup-tracker.html` — Private tracking file (gitignored, never upload to GitHub)
+
+### Notes
+- Many services use V2Board/SSPanel — similar UI, often require login to see pricing
+- Captcha/OTP expected on signup flows
+- Some sites may have Cloudflare protection or be blocked in certain regions
+- URL shorteners (s.yam.com) used for some services — resolve to actual domains
+
+---
 
 ---
 

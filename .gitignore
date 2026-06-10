@@ -42,3 +42,6 @@ yarn.lock
 # Build outputs (if any build step added later)
 dist/
 build/
+
+# Private tracking tools (never upload to GitHub)
+signup-tracker.html

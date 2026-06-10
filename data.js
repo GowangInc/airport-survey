@@ -2,46 +2,17 @@
 // Edit this file to update pricing, add new services, or modify existing entries.
 // Then commit and push to GitHub Pages.
 
-// Define your referral codes here.
-// Map the service slug to your custom referral code.
-// Example: const referralCodes = { ssrdog: "mycode", wgetcloud: "anothercode" };
-const referralCodes = {
-  // Put your custom codes here to automatically override or append them to registration links
-};
-
-function getServiceUrl(s) {
-  if (!s.url) return '';
-  const code = referralCodes[s.slug];
-  if (!code) return s.url;
-  try {
-    const urlObj = new URL(s.url);
-    if (urlObj.hash && urlObj.hash.includes('code=')) {
-      urlObj.hash = urlObj.hash.replace(/code=[^&]+/, 'code=' + code);
-    } else if (urlObj.searchParams.has('code')) {
-      urlObj.searchParams.set('code', code);
-    } else if (urlObj.searchParams.has('aff')) {
-      urlObj.searchParams.set('aff', code);
-    } else {
-      if (s.url.includes('#/register')) {
-        if (s.url.includes('code=')) {
-          return s.url.replace(/code=[^&]+/, 'code=' + code);
-        } else {
-          return s.url + (s.url.includes('?') ? '&' : '?') + 'code=' + code;
-        }
-      }
-      urlObj.searchParams.set('code', code);
-    }
-    return urlObj.toString();
-  } catch (e) {
-    return s.url;
-  }
-}
+// Each service has a `links` array with { label, url } objects.
+// Labels: "Official", "Register", "Client", etc.
+// Add your own referral codes by appending ?code=YOURCODE to register URLs.
 
 const top8 = [
   {
     name: "WgetCloud",
     nameZh: "WgetCloud 全球加速",
-    slug: "wgetcloud", url: "",
+    links: [
+      { label: "Official", url: "https://wgetcloud.org" }
+    ],
     desc: "Premium dedicated-line airport. Stable bypass choice. High-end dedicated line. 30,000+ paid users. 10,000 bandwidth.",
     descZh: "高端专线机场，稳定翻墙之选。30000+付费用户，线路带宽10000。",
     protocols: ["Trojan"],
@@ -59,7 +30,9 @@ const top8 = [
   {
     name: "Boost Net",
     nameZh: "Boost Net",
-    slug: "boostnet", url: "",
+    links: [
+      { label: "Official", url: "https://boostnet.net" }
+    ],
     desc: "Premium niche airport. All-node IEPL dedicated line. 30+ server locations worldwide. Full streaming unlock.",
     descZh: "小众精品向机场，全节点IEPL专线，30+服务器位置。",
     protocols: ["AnyTLS"],
@@ -78,7 +51,9 @@ const top8 = [
   {
     name: "Viking Links",
     nameZh: "Viking Links",
-    slug: "vikinglinks", url: "",
+    links: [
+      { label: "Official", url: "https://vikinglinks.com" }
+    ],
     desc: "Premium dedicated line + optimized direct-connect. IPLC & IEPL nodes. Multiple China ingress points. Emby service included.",
     descZh: "高端专线，新增优化直连。IPLC/IEPL专线，国内多入口。",
     protocols: ["Trojan"],
@@ -96,7 +71,9 @@ const top8 = [
   {
     name: "E-IX",
     nameZh: "E-IX 机场",
-    slug: "eix", url: "",
+    links: [
+      { label: "Official", url: "https://eix.com" }
+    ],
     desc: "BGP ingress premium dedicated line. Multiple IEPL cross-border lines (Shenzhen-HK, Shanghai-JP, Beijing-DE). Xinjiang-specific plans available.",
     descZh: "BGP入口高端专线。深港/沪日/京德IEPL专线。",
     protocols: ["Shadowsocks", "AnyTLS"],
@@ -114,7 +91,9 @@ const top8 = [
   {
     name: "SSRDOG",
     nameZh: "SSRDOG 机场",
-    slug: "ssrdog", url: "",
+    links: [
+      { label: "Official", url: "https://ssrdog.com" }
+    ],
     desc: "IEPL dedicated-line airport since 2022. Custom client. 10Gbps ultra-large bandwidth. Good streaming & ChatGPT unlock.",
     descZh: "IEPL专线机场，2022年运营。定制客户端。10Gbps超大带宽。",
     protocols: ["Shadowsocks", "AnyTLS"],
@@ -132,7 +111,9 @@ const top8 = [
   {
     name: "IPLC.VIP",
     nameZh: "IPLC.VIP",
-    slug: "iplcvip", url: "",
+    links: [
+      { label: "Official", url: "https://iplc.vip" }
+    ],
     desc: "Legacy IPLC dedicated-line since 2019. Invite-code registration required. Limited quantity sales. Annual payment only.",
     descZh: "老牌IPLC专线，2019年或更早开业。邀请码注册，限量发售。",
     protocols: ["Shadowsocks"],
@@ -149,7 +130,9 @@ const top8 = [
   {
     name: "Coffee Cloud",
     nameZh: "Coffee Cloud 咖啡云",
-    slug: "coffeecloud", url: "",
+    links: [
+      { label: "Official", url: "https://coffeecloud.net" }
+    ],
     desc: "Small relay airport operating for years. Public tunnel relay + some IEPL dedicated-line nodes. Custom V-Ninja client (Windows/Mac/Android/iOS).",
     descZh: "中转小机场，运营多年。公网隧道+少量IEPL专线。定制V-Ninja客户端。",
     protocols: ["Shadowsocks", "AnyTLS", "V-Ninja"],
@@ -168,7 +151,10 @@ const top8 = [
   {
     name: "Night Fury Cloud",
     nameZh: "夜煞云",
-    slug: "yesha", url: "",
+    links: [
+      { label: "Official", url: "https://www.night-furyx.com" },
+      { label: "Register", url: "https://www.night-furyx.com/#/register?code=365913" }
+    ],
     desc: "Low-key multi-protocol relay small airport. Also has IPLC dedicated-line nodes. Custom 3-platform client. Pay-as-you-go traffic packs available (no expiry).",
     descZh: "多协议中转小机场，也有IPLC专线节点。定制三端。提供不限时长按量付费流量包。",
     protocols: ["Shadowsocks", "Trojan", "AnyTLS"],
@@ -190,10 +176,16 @@ const top8 = [
 
 const legacy = [
   {
-    name: "Nexitally", nameZh: "奶昔机场", slug: "nexitally", url: "",
+    name: "Nexitally",
+    nameZh: "奶昔机场",
+    links: [
+      { label: "Official", url: "https://nexitally.com" }
+    ],
     desc: "Famous NaiXi (milkshake) airport. Well-known name in the scene. China BGP relay. Smart access point allocation.",
-    descZh: "鼎鼎大名的奶昔机场。", protocols: ["Shadowsocks", "Trojan", "AnyTLS"],
-    tags: ["famous", "dedicated line", "stable"], payment: "Alipay, WeChat",
+    descZh: "鼎鼎大名的奶昔机场。",
+    protocols: ["Shadowsocks", "Trojan", "AnyTLS"],
+    tags: ["famous", "dedicated line", "stable"],
+    payment: "Alipay, WeChat",
     pricing: [
       { name: "Smart Access 31d", monthly: "¥117.46", traffic: "500G/31days", notes: "2 devices | Up to 2000Mbps | Netflix 3 days" },
       { name: "Smart Access 186d", monthly: "¥99", traffic: "500G/31days", notes: "2 devices | Up to 2000Mbps | Netflix 7 days" },
@@ -201,24 +193,40 @@ const legacy = [
       { name: "Premium Access X12", monthly: "¥162", traffic: "500G/31days", notes: "JP/US/KR Anycast | China-US financial dedicated line | Netflix/Disney+/Spotify 360 days" },
       { name: "Group Access", monthly: "¥45.15", traffic: "—", notes: "5 devices | Requires base service" }
     ],
-    speed: "Up to 2000Mbps", nodes: "HK, JP, TW, SG, US", restrictions: ""
+    speed: "Up to 2000Mbps",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: ""
   },
   {
-    name: "Imm Telecom", nameZh: "Imm Telecom", slug: "immtelecom", url: "",
+    name: "Imm Telecom",
+    nameZh: "Imm Telecom",
+    links: [
+      { label: "Official", url: "https://immtelecom.com" }
+    ],
     desc: "Unlock support, stable nodes. Optimized for mainland China. 2.5Gbps max speed.",
-    descZh: "解锁支持，节点稳定。", protocols: ["Shadowsocks"],
-    tags: ["unlock", "stable", "dedicated line"], payment: "Alipay, WeChat",
+    descZh: "解锁支持，节点稳定。",
+    protocols: ["Shadowsocks"],
+    tags: ["unlock", "stable", "dedicated line"],
+    payment: "Alipay, WeChat",
     pricing: [
       { name: "Basic Personal", monthly: "¥17.4", traffic: "25G/mo", notes: "¥208.95/yr total | 300GB/yr | 2.5Gbps | 2 IPs" },
       { name: "Basic Extended", monthly: "¥43.3", traffic: "200G/mo", notes: "¥129.99/qtr | 2.5Gbps | 2 IPs" }
     ],
-    speed: "2.5Gbps", nodes: "HK, JP, TW, SG, US", restrictions: ""
+    speed: "2.5Gbps",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: ""
   },
   {
-    name: "Old Cat Cloud", nameZh: "老猫云", slug: "laomao", url: "",
+    name: "Old Cat Cloud",
+    nameZh: "老猫云",
+    links: [
+      { label: "Official", url: "https://laomao.cloud" }
+    ],
     desc: "Dedicated-line airport, node speed-limited. Enterprise IEPL dedicated line. 3-day refund policy. Quarterly minimum.",
-    descZh: "专线机场，节点限速，季付起步。", protocols: ["V2ray"],
-    tags: ["dedicated line", "speed-limited", "quarterly-min"], payment: "Alipay",
+    descZh: "专线机场，节点限速，季付起步。",
+    protocols: ["V2ray"],
+    tags: ["dedicated line", "speed-limited", "quarterly-min"],
+    payment: "Alipay",
     pricing: [
       { name: "Plan B", monthly: "¥15", traffic: "50G/mo", notes: "IEPL | Up to 200Mbps | 99% SLA | 50+ nodes" },
       { name: "Plan C", monthly: "¥20", traffic: "100G/mo", notes: "IEPL | Up to 300Mbps | 99% SLA | 50+ nodes" },
@@ -226,59 +234,99 @@ const legacy = [
       { name: "Plan E", monthly: "¥40", traffic: "300G/mo", notes: "IEPL | Up to 500Mbps | 99% SLA | 50+ nodes" },
       { name: "Plan F", monthly: "¥50", traffic: "500G/mo", notes: "IEPL | Up to 1000Mbps | 99% SLA | 50+ nodes" }
     ],
-    speed: "200–1000Mbps", nodes: "50+ global", restrictions: "Quarterly payment minimum. Node speed-limited."
+    speed: "200–1000Mbps",
+    nodes: "50+ global",
+    restrictions: "Quarterly payment minimum. Node speed-limited."
   },
   {
-    name: "X-Air", nameZh: "X-Air", slug: "x-air", url: "https://a012.red.xn-----dg4abflpy2ck1slc9ig05ag.xn--tckwe:666/#/ad/v2rayng",
+    name: "X-Air",
+    nameZh: "X-Air",
+    links: [
+      { label: "Official", url: "https://xair.name" }
+    ],
     desc: "Low-key niche, legacy airport. Unlimited simultaneous connections. Streaming unlock acceleration.",
-    descZh: "低调小众，老牌机场。", protocols: ["Hysteria", "VLESS"],
-    tags: ["niche", "low-key"], payment: "Alipay",
+    descZh: "低调小众，老牌机场。",
+    protocols: ["Hysteria", "VLESS"],
+    tags: ["niche", "low-key"],
+    payment: "Alipay",
     pricing: [
       { name: "Advanced Annual", monthly: "¥26", traffic: "168G/mo", notes: "¥311.85/yr | 2.01TB total | Unlimited connections" },
       { name: "Advanced Deluxe Annual", monthly: "¥34.8", traffic: "333G/mo", notes: "¥417.9/yr | 4TB total | Unlimited connections" },
       { name: "Advanced Monthly", monthly: "¥30.45", traffic: "150G/mo", notes: "Monthly | Streaming unlock" },
       { name: "Advanced 6mo", monthly: "¥28.9", traffic: "167G/mo", notes: "¥173.25/6mo | 1TB total | Streaming unlock" }
     ],
-    speed: "Unlimited", nodes: "HK, JP, TW, SG, US", restrictions: ""
+    speed: "Unlimited",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: ""
   },
   {
-    name: "YToo", nameZh: "歪兔 YToo", slug: "ytoo", url: "",
+    name: "YToo",
+    nameZh: "歪兔 YToo",
+    links: [
+      { label: "Official", url: "https://ytoo.net" }
+    ],
     desc: "Flower Cloud alternative, has low-rate nodes. Good streaming & ChatGPT unlock. Custom client. Low rate: 0.2x during day (02:30-13:00).",
-    descZh: "花云平替，有低倍率。", protocols: ["Shadowsocks", "Trojan"],
-    tags: ["low-rate", "alternative", "dedicated line"], payment: "Alipay",
+    descZh: "花云平替，有低倍率。",
+    protocols: ["Shadowsocks", "Trojan"],
+    tags: ["low-rate", "alternative", "dedicated line"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "HK, JP, TW, SG, US", restrictions: "Low-rate nodes: 0.2x during day hours."
+    speed: "Unlimited",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: "Low-rate nodes: 0.2x during day hours."
   },
   {
-    name: "FlowerCloud", nameZh: "花云 FlowerCloud", slug: "flowercloud", url: "",
+    name: "FlowerCloud",
+    nameZh: "花云 FlowerCloud",
+    links: [
+      { label: "Official", url: "https://flowercloud.net" }
+    ],
     desc: "First-tier airport. Global acceleration with mainland China international dedicated line. 80+ edge networks. ChatGPT unlock.",
-    descZh: "第一梯队机场。", protocols: ["Shadowsocks", "Trojan"],
-    tags: ["first-tier", "dedicated line", "high-end"], payment: "Alipay, WeChat",
+    descZh: "第一梯队机场。",
+    protocols: ["Shadowsocks", "Trojan"],
+    tags: ["first-tier", "dedicated line", "high-end"],
+    payment: "Alipay, WeChat",
     pricing: [
       { name: "Air", monthly: "¥10.7", traffic: "20GiB/mo", notes: "¥128/yr | Up to 1000Mbps | 80+ edge networks" },
       { name: "Lite", monthly: "¥39", traffic: "150GiB/mo", notes: "Monthly | Up to 1000Mbps | 80+ edge networks" },
       { name: "Plus", monthly: "¥58", traffic: "400GiB/mo", notes: "Monthly | Up to 1000Mbps | 80+ edge networks" },
       { name: "Max", monthly: "¥113", traffic: "1000GiB/mo", notes: "Monthly | Up to 1000Mbps | 80+ edge networks" }
     ],
-    speed: "Up to 1000Mbps", nodes: "80+ edge networks", restrictions: "Personal use only."
+    speed: "Up to 1000Mbps",
+    nodes: "80+ edge networks",
+    restrictions: "Personal use only."
   },
   {
-    name: "LinkCube", nameZh: "LinkCube 绿叶", slug: "linkcube", url: "",
+    name: "LinkCube",
+    nameZh: "LinkCube 绿叶",
+    links: [
+      { label: "Official", url: "https://linkcube.net" }
+    ],
     desc: "Large dedicated-line airport, green-leaf acceleration. BGP ingress. International dedicated line transmission. 50+ nodes.",
-    descZh: "专线大机场，绿叶加速。", protocols: ["Shadowsocks", "Trojan"],
-    tags: ["large-airport", "dedicated line"], payment: "Alipay",
+    descZh: "专线大机场，绿叶加速。",
+    protocols: ["Shadowsocks", "Trojan"],
+    tags: ["large-airport", "dedicated line"],
+    payment: "Alipay",
     pricing: [
       { name: "Light", monthly: "¥15", traffic: "100GiB/mo", notes: "Monthly | Up to 1000Mbps | 50+ nodes | Full platform" },
       { name: "Standard", monthly: "¥26.7", traffic: "300GiB/mo", notes: "¥160/6mo | Up to 1000Mbps | Full streaming unlock" },
       { name: "High-Volume", monthly: "¥76.7", traffic: "900GiB/mo", notes: "¥460/6mo | Up to 1000Mbps | Full streaming unlock" }
     ],
-    speed: "Up to 1000Mbps", nodes: "50+ nodes", restrictions: "Personal use only."
+    speed: "Up to 1000Mbps",
+    nodes: "50+ nodes",
+    restrictions: "Personal use only."
   },
   {
-    name: "CTC / JinLongYu", nameZh: "CTC 金龙鱼", slug: "ctc", url: "",
+    name: "CTC / JinLongYu",
+    nameZh: "CTC 金龙鱼",
+    links: [
+      { label: "Official", url: "https://ctc.net" }
+    ],
     desc: "JinLongYu airport, invite-only registration. Monthly and annual plans. USDT payment gets 5% discount.",
-    descZh: "金龙鱼机场，邀请注册。", protocols: ["Shadowsocks"],
-    tags: ["invite-only", "dedicated line"], payment: "Alipay, USDT",
+    descZh: "金龙鱼机场，邀请注册。",
+    protocols: ["Shadowsocks"],
+    tags: ["invite-only", "dedicated line"],
+    payment: "Alipay, USDT",
     pricing: [
       { name: "SE-100G", monthly: "¥20", traffic: "100G/mo", notes: "Monthly reset | 1x & 2x rate nodes" },
       { name: "SE-200G", monthly: "¥40", traffic: "200G/mo", notes: "Monthly reset | 1x & 2x rate nodes" },
@@ -287,13 +335,21 @@ const legacy = [
       { name: "Max-5000G", monthly: "¥125", traffic: "5000G/yr", notes: "¥1500/yr | Annual | No monthly reset" },
       { name: "PAYG-1314G", monthly: "—", traffic: "1314G one-time", notes: "¥400 one-time | No expiry | USDT 5% off" }
     ],
-    speed: "Unlimited", nodes: "HK, JP, TW, SG, US", restrictions: "Invite code required for registration."
+    speed: "Unlimited",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: "Invite code required for registration."
   },
   {
-    name: "Riolu", nameZh: "Riolu 精灵学院", slug: "riolu", url: "",
+    name: "Riolu",
+    nameZh: "Riolu 精灵学院",
+    links: [
+      { label: "Official", url: "https://riolu.net" }
+    ],
     desc: "Legacy airport, AnyTLS new protocol. Full IEPL & relay ingress. ChatGPT/Claude AI support. Emby service.",
-    descZh: "老牌机场，AnyTLS 新协议。", protocols: ["AnyTLS"],
-    tags: ["AnyTLS", "custom client"], payment: "Alipay",
+    descZh: "老牌机场，AnyTLS 新协议。",
+    protocols: ["AnyTLS"],
+    tags: ["AnyTLS", "custom client"],
+    payment: "Alipay",
     pricing: [
       { name: "Iron", monthly: "¥8", traffic: "30GB/mo", notes: "500Mb/s | Full IEPL | ChatGPT/Claude | No Emby" },
       { name: "Silver", monthly: "¥15", traffic: "120GB/mo", notes: "500Mb/s | Full IEPL | ChatGPT/Claude | Emby" },
@@ -302,13 +358,21 @@ const legacy = [
       { name: "PAYG Small", monthly: "—", traffic: "400GB one-time", notes: "¥70 one-time | 500Mb/s | No expiry" },
       { name: "PAYG Large", monthly: "—", traffic: "800GB one-time", notes: "¥130 one-time | 500Mb/s | No expiry" }
     ],
-    speed: "500Mb/s", nodes: "Global", restrictions: "No refunds."
+    speed: "500Mb/s",
+    nodes: "Global",
+    restrictions: "No refunds."
   },
   {
-    name: "FluxLink", nameZh: "云翼网络", slug: "fluxlink", url: "",
+    name: "FluxLink",
+    nameZh: "云翼网络",
+    links: [
+      { label: "Official", url: "https://fluxlink.net" }
+    ],
     desc: "Since 2020. Custom 3-platform client. IEPL dedicated line. Unlimited streaming unlock.",
-    descZh: "2020年老牌，定制三端，VLESS。", protocols: ["VLESS"],
-    tags: ["custom client", "2020", "VLESS"], payment: "Alipay, WeChat",
+    descZh: "2020年老牌，定制三端，VLESS。",
+    protocols: ["VLESS"],
+    tags: ["custom client", "2020", "VLESS"],
+    payment: "Alipay, WeChat",
     pricing: [
       { name: "Standard", monthly: "¥26.9", traffic: "108GiB/mo", notes: "IEPL | 4 devices | Monthly reset" },
       { name: "Premium", monthly: "¥37.9", traffic: "198GiB/mo", notes: "IEPL | 4 devices | Monthly reset" },
@@ -317,37 +381,61 @@ const legacy = [
       { name: "Annual 1398G", monthly: "¥31.5", traffic: "117GiB/mo", notes: "¥378/yr | 1398GiB total | 5 devices" },
       { name: "Annual 3288G", monthly: "¥65.8", traffic: "274GiB/mo", notes: "¥789/yr | 3288GiB total | 8 devices" }
     ],
-    speed: "Unlimited", nodes: "HK, JP, TW, SG, US", restrictions: ""
+    speed: "Unlimited",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: ""
   },
   {
-    name: "Poros", nameZh: "Poros", slug: "poros", url: "",
+    name: "Poros",
+    nameZh: "Poros",
+    links: [
+      { label: "Official", url: "https://poros.net" }
+    ],
     desc: "Low-key niche, ultra-high-rate dedicated-line nodes. BGP standard + IPLC premium nodes. 20 nodes. Unlimited devices.",
-    descZh: "低调小众，专线节点超高倍率。", protocols: ["Shadowsocks", "V2ray", "AnyTLS"],
-    tags: ["niche", "ultra-high-rate", "dedicated line"], payment: "Alipay",
+    descZh: "低调小众，专线节点超高倍率。",
+    protocols: ["Shadowsocks", "V2ray", "AnyTLS"],
+    tags: ["niche", "ultra-high-rate", "dedicated line"],
+    payment: "Alipay",
     pricing: [
       { name: "Lite", monthly: "¥10", traffic: "50G/mo", notes: "BGP + IPLC | 20 nodes | Unlimited devices" },
       { name: "Pro", monthly: "¥15", traffic: "100G/mo", notes: "BGP + IPLC | 20 nodes | Unlimited devices" }
     ],
-    speed: "Unlimited", nodes: "Asia, Americas, Europe", restrictions: "Ultra-high rate nodes."
+    speed: "Unlimited",
+    nodes: "Asia, Americas, Europe",
+    restrictions: "Ultra-high rate nodes."
   },
   {
-    name: "ByWave", nameZh: "ByWave", slug: "bywave", url: "",
+    name: "ByWave",
+    nameZh: "ByWave",
+    links: [
+      { label: "Official", url: "https://bywave.net" }
+    ],
     desc: "Legacy dedicated-line airport. Financial-grade 10G IEPL dedicated line. Full Netflix/Disney+/ChatGPT unlock. Emby.",
-    descZh: "老牌专线机场。", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
+    descZh: "老牌专线机场。",
+    protocols: ["Shadowsocks"],
+    tags: ["dedicated line"],
+    payment: "Alipay",
     pricing: [
       { name: "Special", monthly: "¥11.7", traffic: "17G/mo", notes: "¥140 one-time | 360days | 200G total | 100Mbps | 10 devices" },
       { name: "Bronze", monthly: "¥30", traffic: "150G/mo", notes: "Monthly | 500Mbps | 10 devices | Financial IEPL" },
       { name: "Gold", monthly: "¥60", traffic: "500G/mo", notes: "Monthly | 1000Mbps | 10 devices | Emby" },
       { name: "Platinum", monthly: "¥110", traffic: "1000G/mo", notes: "Monthly | Unlimited speed | 10 devices | Emby" }
     ],
-    speed: "100Mbps–Unlimited", nodes: "Global", restrictions: "No refunds."
+    speed: "100Mbps–Unlimited",
+    nodes: "Global",
+    restrictions: "No refunds."
   },
   {
-    name: "Seele Cloud", nameZh: "Seele Cloud", slug: "seelecloud", url: "",
+    name: "Seele Cloud",
+    nameZh: "Seele Cloud",
+    links: [
+      { label: "Official", url: "https://seelecloud.net" }
+    ],
     desc: "Low-key niche, operating for many years. Unlimited speed on most plans. Home broadband IP available.",
-    descZh: "低调小众，开业多年。", protocols: ["AnyTLS"],
-    tags: ["niche", "many-years"], payment: "Alipay",
+    descZh: "低调小众，开业多年。",
+    protocols: ["AnyTLS"],
+    tags: ["niche", "many-years"],
+    payment: "Alipay",
     pricing: [
       { name: "Night Walk", monthly: "¥4.75", traffic: "17G/mo", notes: "¥14.25/qtr | 50GB | Unlimited speed" },
       { name: "Ripple", monthly: "¥14.20", traffic: "200G/mo", notes: "Monthly | Unlimited speed" },
@@ -355,13 +443,21 @@ const legacy = [
       { name: "PAYG Small", monthly: "—", traffic: "120GB one-time", notes: "¥24.90 one-time | Unlimited speed" },
       { name: "PAYG Large", monthly: "—", traffic: "300GB one-time", notes: "¥58.90 one-time | Unlimited speed" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "WUXX", nameZh: "WUXX", slug: "wuxx", url: "",
+    name: "WUXX",
+    nameZh: "WUXX",
+    links: [
+      { label: "Official", url: "https://wuxx.net" }
+    ],
     desc: "Dedicated-line + premium direct-connect combo. Full IEPL nodes. PAYG available. Unlimited speed on Premium.",
-    descZh: "专线+精品直连的组合。", protocols: ["V2ray", "VLESS"],
-    tags: ["dedicated line", "direct-connect", "multi-protocol"], payment: "Alipay",
+    descZh: "专线+精品直连的组合。",
+    protocols: ["V2ray", "VLESS"],
+    tags: ["dedicated line", "direct-connect", "multi-protocol"],
+    payment: "Alipay",
     pricing: [
       { name: "Mini", monthly: "¥9.99", traffic: "50G/mo", notes: "50Mbps | 1 device | 5 regions" },
       { name: "Standard", monthly: "¥29.99", traffic: "150G/mo", notes: "100Mbps | 3 devices | 10+ regions" },
@@ -369,13 +465,21 @@ const legacy = [
       { name: "PAYG 300GB", monthly: "—", traffic: "300GB one-time", notes: "¥139 one-time | Unlimited speed" },
       { name: "PAYG 1000GB", monthly: "—", traffic: "1000GB one-time", notes: "¥399 one-time | Unlimited speed" }
     ],
-    speed: "50Mbps–Unlimited", nodes: "10+ regions", restrictions: ""
+    speed: "50Mbps–Unlimited",
+    nodes: "10+ regions",
+    restrictions: ""
   },
   {
-    name: "GieGie Cloud", nameZh: "GieGie Cloud", slug: "giegiecloud", url: "",
+    name: "GieGie Cloud",
+    nameZh: "GieGie Cloud",
+    links: [
+      { label: "Official", url: "https://giegie.cloud" }
+    ],
     desc: "Legacy niche airport. Standard relay + dedicated line options. Mainland China only. ChatGPT unlock.",
-    descZh: "老牌小众机场。", protocols: ["Shadowsocks"],
-    tags: ["niche"], payment: "Alipay",
+    descZh: "老牌小众机场。",
+    protocols: ["Shadowsocks"],
+    tags: ["niche"],
+    payment: "Alipay",
     pricing: [
       { name: "Std Small", monthly: "¥13", traffic: "166G/mo", notes: "Relay | 5 IPs | ChatGPT unlock" },
       { name: "Std Medium", monthly: "¥25", traffic: "388G/mo", notes: "Relay | 5 IPs | ChatGPT unlock" },
@@ -384,26 +488,42 @@ const legacy = [
       { name: "Line Small", monthly: "¥19", traffic: "64G/mo", notes: "IPLC dedicated line | 5 IPs | ChatGPT unlock" },
       { name: "Line Large", monthly: "¥49", traffic: "256G/mo", notes: "IPLC dedicated line | 5 IPs | ChatGPT unlock" }
     ],
-    speed: "Unlimited", nodes: "China mainland relay", restrictions: "Mainland China only. No Xinjiang guarantee."
+    speed: "Unlimited",
+    nodes: "China mainland relay",
+    restrictions: "Mainland China only. No Xinjiang guarantee."
   },
   {
-    name: "AgentNEO", nameZh: "AgentNEO", slug: "agentneo", url: "",
+    name: "AgentNEO",
+    nameZh: "AgentNEO",
+    links: [
+      { label: "Official", url: "https://agentneo.net" }
+    ],
     desc: "Legacy low-key relay station. Multi-platform support. Netflix unlock. No BT downloads.",
-    descZh: "老牌低调中转站。", protocols: ["Trojan", "VLESS"],
-    tags: ["low-key", "relay"], payment: "Alipay",
+    descZh: "老牌低调中转站。",
+    protocols: ["Trojan", "VLESS"],
+    tags: ["low-key", "relay"],
+    payment: "Alipay",
     pricing: [
       { name: "Basic A", monthly: "¥12", traffic: "20G/mo", notes: "Multi-platform | Netflix | No BT" },
       { name: "High-Vol A", monthly: "¥20", traffic: "50G/mo", notes: "Multi-platform | Netflix | No BT" },
       { name: "High-Vol B", monthly: "¥33.33", traffic: "150G/mo", notes: "Multi-platform | Netflix | No BT" },
       { name: "High-Vol C", monthly: "¥46.67", traffic: "750G/mo", notes: "Multi-platform | Netflix | No BT" }
     ],
-    speed: "Unlimited", nodes: "HK, US, KR, SG", restrictions: "No BT downloads. Personal use only."
+    speed: "Unlimited",
+    nodes: "HK, US, KR, SG",
+    restrictions: "No BT downloads. Personal use only."
   },
   {
-    name: "XFLTD", nameZh: "XFSS 养鸡场", slug: "xfltd", url: "",
+    name: "XFLTD",
+    nameZh: "XFSS 养鸡场",
+    links: [
+      { label: "Official", url: "https://xfltd.net" }
+    ],
     desc: "XFSS chicken farm. IEPL dedicated line options. 1Gbps bandwidth guarantee. No refunds.",
-    descZh: "XFSS 养鸡场。", protocols: ["Shadowsocks"],
-    tags: ["chicken-farm"], payment: "Alipay",
+    descZh: "XFSS 养鸡场。",
+    protocols: ["Shadowsocks"],
+    tags: ["chicken-farm"],
+    payment: "Alipay",
     pricing: [
       { name: "2yr 1024G", monthly: "¥3.2", traffic: "43G/mo", notes: "¥77/2yr | 1024G total | 1Gbps | No refund" },
       { name: "IEPL 300G", monthly: "¥12", traffic: "300G/mo", notes: "IEPL dedicated line | 1Gbps | No refund" },
@@ -411,13 +531,21 @@ const legacy = [
       { name: "150G Plan", monthly: "¥7", traffic: "150G/mo", notes: "1Gbps | No refund" },
       { name: "500G Plan", monthly: "¥20", traffic: "500G/mo", notes: "1Gbps | No refund" }
     ],
-    speed: "1Gbps guaranteed", nodes: "Global", restrictions: "No refunds. Xinjiang not supported."
+    speed: "1Gbps guaranteed",
+    nodes: "Global",
+    restrictions: "No refunds. Xinjiang not supported."
   },
   {
-    name: "KuaiChongYun", nameZh: "快充云", slug: "kuaichongyun", url: "",
+    name: "KuaiChongYun",
+    nameZh: "快充云",
+    links: [
+      { label: "Official", url: "https://kuaichongyun.com" }
+    ],
     desc: "Many home-broadband IP nodes are the highlight. Military-grade encryption. Dynamic nodes. No refunds.",
-    descZh: "较多家宽 IP 节点是特色。", protocols: ["Shadowsocks"],
-    tags: ["home-IP", "feature"], payment: "Alipay",
+    descZh: "较多家宽 IP 节点是特色。",
+    protocols: ["Shadowsocks"],
+    tags: ["home-IP", "feature"],
+    payment: "Alipay",
     pricing: [
       { name: "360G/90d", monthly: "¥13.3", traffic: "120G/mo", notes: "¥40/90d | Home broadband IP | 500MB node speed" },
       { name: "266G/30d", monthly: "¥27", traffic: "266G/mo", notes: "Dynamic nodes | Home broadband IP | Unlimited speed" },
@@ -425,26 +553,42 @@ const legacy = [
       { name: "610G/30d", monthly: "¥62", traffic: "610G/mo", notes: "Dynamic nodes | Home broadband IP | Unlimited speed" },
       { name: "1024G/30d", monthly: "¥103", traffic: "1024G/mo", notes: "Dynamic nodes | Home broadband IP | Unlimited speed" }
     ],
-    speed: "500MB–Unlimited", nodes: "60+ regions", restrictions: "No refunds. Xinjiang not guaranteed."
+    speed: "500MB–Unlimited",
+    nodes: "60+ regions",
+    restrictions: "No refunds. Xinjiang not guaranteed."
   },
   {
-    name: "MuNiu Cloud", nameZh: "牧牛云 MUNIUCLOUD", slug: "muniu", url: "",
+    name: "MuNiu Cloud",
+    nameZh: "牧牛云 MUNIUCLOUD",
+    links: [
+      { label: "Official", url: "https://muniu.cloud" }
+    ],
     desc: "Since 2020. Public tunnel relay + IEPL dedicated line. Multi-platform client. Quick support.",
-    descZh: "2020年老牌，公网隧道中转+IEPL专线。", protocols: ["Shadowsocks"],
-    tags: ["IEPL", "2020", "public-relay"], payment: "Alipay",
+    descZh: "2020年老牌，公网隧道中转+IEPL专线。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL", "2020", "public-relay"],
+    payment: "Alipay",
     pricing: [
       { name: "Trial", monthly: "¥3.4", traffic: "5G/mo", notes: "¥8/7d | 35GB | 150Mbps | Unlimited devices" },
       { name: "Bronze", monthly: "¥20.80", traffic: "90G/mo", notes: "100Mbps | Unlimited devices | Global nodes" },
       { name: "Silver", monthly: "¥32.80", traffic: "180G/mo", notes: "200Mbps | Unlimited devices | Global nodes" },
       { name: "Silver+", monthly: "¥52.80", traffic: "350G/mo", notes: "300Mbps | Unlimited devices | Global nodes" }
     ],
-    speed: "150–300Mbps", nodes: "Global", restrictions: ""
+    speed: "150–300Mbps",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "ZhangZhongShiJie", nameZh: "掌中世界", slug: "zzsj", url: "",
+    name: "ZhangZhongShiJie",
+    nameZh: "掌中世界",
+    links: [
+      { label: "Official", url: "https://zzsj.net" }
+    ],
     desc: "Since 2021. 3-entry-point relay. Custom beginner 3-platform client. ChatGPT/Netflix/Midjourney support.",
-    descZh: "2021年小机场，三线入口，中转机场。", protocols: ["Shadowsocks"],
-    tags: ["3-platform", "2021", "custom client"], payment: "Alipay",
+    descZh: "2021年小机场，三线入口，中转机场。",
+    protocols: ["Shadowsocks"],
+    tags: ["3-platform", "2021", "custom client"],
+    payment: "Alipay",
     pricing: [
       { name: "BA1.0", monthly: "¥18", traffic: "100G/mo", notes: "500Mbps | 2 devices | ChatGPT/Netflix" },
       { name: "ST2.0", monthly: "¥20", traffic: "280G/mo", notes: "500Mbps | 3 devices | ChatGPT/Netflix" },
@@ -454,12 +598,16 @@ const legacy = [
       { name: "King", monthly: "¥12.5", traffic: "87G/mo", notes: "¥299/2yr | 2088GB one-time | Unlimited speed" },
       { name: "Heirloom", monthly: "—", traffic: "5550G one-time", notes: "¥399 one-time | Unlimited speed | 10 devices" }
     ],
-    speed: "300Mbps–Unlimited", nodes: "HK, US, KR, SG", restrictions: ""
+    speed: "300Mbps–Unlimited",
+    nodes: "HK, US, KR, SG",
+    restrictions: ""
   },
   {
     name: "WannaFlix",
     nameZh: "WannaFlix",
-    slug: "wannaflix", url: "",
+    links: [
+      { label: "Official", url: "https://wannaflix.com" }
+    ],
     desc: "Commercial VPN service (not an airport). 19 countries, 16 premium locations. 5 simultaneous connections. 256-bit encryption. No logs. 30-day money-back guarantee. 3-day free trial.",
     descZh: "商业VPN服务，非机场。",
     protocols: ["OpenVPN", "WireGuard", "IKEv2"],
@@ -477,11 +625,17 @@ const legacy = [
 ];
 
 const testing = [
-{
-    name: "FliggyCloud", nameZh: "飞天猫 FliggyCloud", slug: "fliggycloud", url: "",
+  {
+    name: "FliggyCloud",
+    nameZh: "飞天猫 FliggyCloud",
+    links: [
+      { label: "Official", url: "https://fliggycloud.com" }
+    ],
     desc: "2024 premium airport. IPLC dedicated line. 3000Mbps max. Netflix/Disney+/HBO/TikTok/ChatGPT unlock. No device limit.",
-    descZh: "2024新高端机场，IPLC专线。", protocols: ["Shadowsocks"],
-    tags: ["IPLC", "2024", "high-end"], payment: "Alipay",
+    descZh: "2024新高端机场，IPLC专线。",
+    protocols: ["Shadowsocks"],
+    tags: ["IPLC", "2024", "high-end"],
+    payment: "Alipay",
     pricing: [
       { name: "Light", monthly: "¥7", traffic: "50G/mo", notes: "¥84/yr | ¥168/2yr | Traffic reset ¥15" },
       { name: "VIP1", monthly: "¥20", traffic: "120G/mo", notes: "Qtr ¥54 | 6mo ¥102 | Yr ¥192 | 2yr ¥284 | Reset ¥20" },
@@ -490,629 +644,951 @@ const testing = [
       { name: "VIP4", monthly: "¥120", traffic: "1000G/mo", notes: "Qtr ¥324 | 6mo ¥697 | Yr ¥1152 | 2yr ¥2016 | Reset ¥120" },
       { name: "Custom Nodes", monthly: "¥680", traffic: "Custom", notes: "Dedicated IP + bandwidth | TikTok/e-commerce" }
     ],
-    speed: "3000Mbps", nodes: "HK, JP, TW, SG, US", restrictions: "Email whitelist required for registration."
+    speed: "3000Mbps",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: "Email whitelist required for registration."
   },
   {
-    name: "Deer Whisper Cloud", nameZh: "鹿语云", slug: "luyuyun", url: "",
+    name: "Deer Whisper Cloud",
+    nameZh: "鹿语云",
+    links: [
+      { label: "Official", url: "https://luyuyun.com" }
+    ],
     desc: "Niche dedicated line, selectable ingress. IEPL lines. Residential IP nodes. Founded 2024. Free trial cancelled. Quarterly minimum. Emby partnership.",
-    descZh: "小众专线，可自选入口。", protocols: ["VLESS"],
-    tags: ["niche", "dedicated line", "selectable ingress"], payment: "Alipay, WeChat",
+    descZh: "小众专线，可自选入口。",
+    protocols: ["VLESS"],
+    tags: ["niche", "dedicated line", "selectable ingress"],
+    payment: "Alipay, WeChat",
     pricing: [],
-    speed: "IEPL dedicated line", nodes: "Multiple", restrictions: "Quarterly minimum. Promo: luyu9 (10% off), luyu8 (20% off yearly)."
+    speed: "IEPL dedicated line",
+    nodes: "Multiple",
+    restrictions: "Quarterly minimum. Promo: luyu9 (10% off), luyu8 (20% off yearly)."
   },
   {
-    name: "YouTu", nameZh: "悠兔机场", slug: "youtu", url: "",
+    name: "YouTu",
+    nameZh: "悠兔机场",
+    links: [
+      { label: "Official", url: "https://youtu.net" }
+    ],
     desc: "Premium dedicated-line airport. Good overall performance. Dedicated line nodes up to 2.5x rate. Dynamic off-peak rates. Custom client app.",
-    descZh: "高端专线机场，综合表现不错。", protocols: ["Shadowsocks"],
-    tags: ["high-end", "dedicated line", "excellent"], payment: "Alipay",
+    descZh: "高端专线机场，综合表现不错。",
+    protocols: ["Shadowsocks"],
+    tags: ["high-end", "dedicated line", "excellent"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Up to 2.5x rate", nodes: "Global", restrictions: "Free trial on registration."
+    speed: "Up to 2.5x rate",
+    nodes: "Global",
+    restrictions: "Free trial on registration."
   },
   {
-    name: "Setting Sail Cloud", nameZh: "扬帆云", slug: "yangfanyun", url: "",
+    name: "Setting Sail Cloud",
+    nameZh: "扬帆云",
+    links: [
+      { label: "Official", url: "https://yangfanyun.com" }
+    ],
     desc: "Vmess dedicated-line airport. Public tunnel transit, reportedly upgraded to full IEPL. Founded 2025. NOT the same as 扬帆起航.",
-    descZh: "Vmess 专线机场。", protocols: ["Vmess"],
-    tags: ["dedicated line", "Vmess"], payment: "Alipay",
+    descZh: "Vmess 专线机场。",
+    protocols: ["Vmess"],
+    tags: ["dedicated line", "Vmess"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: "Some nodes may not PING but are usable."
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: "Some nodes may not PING but are usable."
   },
   {
-    name: "Beibei Cloud", nameZh: "贝贝云", slug: "beibeilink", url: "",
+    name: "Beibei Cloud",
+    nameZh: "贝贝云",
+    links: [
+      { label: "Official", url: "https://beibei.link" }
+    ],
     desc: "Relay airport, beginner-friendly. Custom beginner client for 3 platforms. AnyTLS protocol. Telegram: t.me/beibeicloud.",
-    descZh: "中转机场，新手友好。", protocols: ["AnyTLS"],
-    tags: ["relay", "beginner", "friendly", "custom client"], payment: "Alipay",
+    descZh: "中转机场，新手友好。",
+    protocols: ["AnyTLS"],
+    tags: ["relay", "beginner", "friendly", "custom client"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Cyber Guard", nameZh: "Cyber Guard", slug: "cybeguard", url: "",
+    name: "Cyber Guard",
+    nameZh: "Cyber Guard",
+    links: [],
     desc: "DEFUNCT — Ran away Jan 2026. Was: IEPL/IPLC dedicated lines. Netflix/Disney+ unlock. 1000M bandwidth.",
-    descZh: "已跑路（2026年1月）。", protocols: ["Trojan", "VLESS"],
-    tags: ["defunct", "IEPL", "IPLC"], payment: "—",
+    descZh: "已跑路（2026年1月）。",
+    protocols: ["Trojan", "VLESS"],
+    tags: ["defunct", "IEPL", "IPLC"],
+    payment: "—",
     pricing: [],
-    speed: "—", nodes: "—", restrictions: "SERVICE DEFUNCT. Do not purchase."
+    speed: "—",
+    nodes: "—",
+    restrictions: "SERVICE DEFUNCT. Do not purchase."
   },
   {
-    name: "FatCat Cloud", nameZh: "肥猫云", slug: "fatcat", url: "",
+    name: "FatCat Cloud",
+    nameZh: "肥猫云",
+    links: [],
     desc: "SEIZED — Domain seized by Jiangsu Anti-Fraud Network (江苏反诈网). Was: BGP ingress dedicated line. Founded Nov 2023.",
-    descZh: "已被江苏反诈网查封。", protocols: ["Trojan"],
-    tags: ["seized", "defunct", "BGP"], payment: "—",
+    descZh: "已被江苏反诈网查封。",
+    protocols: ["Trojan"],
+    tags: ["seized", "defunct", "BGP"],
+    payment: "—",
     pricing: [],
-    speed: "—", nodes: "—", restrictions: "DOMAIN SEIZED BY AUTHORITIES. Do not use."
+    speed: "—",
+    nodes: "—",
+    restrictions: "DOMAIN SEIZED BY AUTHORITIES. Do not use."
   },
   {
-    name: "YkkCloud", nameZh: "YkkCloud", slug: "ykkcloud", url: "",
+    name: "YkkCloud",
+    nameZh: "YkkCloud",
+    links: [],
     desc: "DEFUNCT — Ran away Sept 2025. Was: VLESS Reality relay + dedicated lines. Netflix hijack nodes. Xinjiang-specific nodes historically.",
-    descZh: "已跑路（2025年9月）。", protocols: ["VLESS"],
-    tags: ["defunct", "VLESS", "Reality"], payment: "—",
+    descZh: "已跑路（2025年9月）。",
+    protocols: ["VLESS"],
+    tags: ["defunct", "VLESS", "Reality"],
+    payment: "—",
     pricing: [],
-    speed: "—", nodes: "—", restrictions: "SERVICE DEFUNCT. Do not purchase."
+    speed: "—",
+    nodes: "—",
+    restrictions: "SERVICE DEFUNCT. Do not purchase."
   },
   {
-    name: "Dragonfly", nameZh: "蜗蜗 Dragonfly", slug: "dragonfly", url: "",
-    desc: "Premium direct-connect station. Next.js SPA.", descZh: "又一家精品直连站。", protocols: ["VLESS"],
-    tags: ["direct-connect", "premium"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: ""
+    name: "Dragonfly",
+    nameZh: "蜗蜗 Dragonfly",
+    links: [
+      { label: "Official", url: "https://dragonfly.net" }
+    ],
+    desc: "Premium direct-connect station. Next.js SPA.",
+    descZh: "又一家精品直连站。",
+    protocols: ["VLESS"],
+    tags: ["direct-connect", "premium"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "AnyNet", nameZh: "AnyNet", slug: "anynet", url: "",
-    desc: "Rare VLESS dedicated-line airport.", descZh: "稀有 VLESS 专线机场。", protocols: ["VLESS"],
-    tags: ["VLESS", "rare", "dedicated line"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: ""
+    name: "AnyNet",
+    nameZh: "AnyNet",
+    links: [
+      { label: "Official", url: "https://anynet.net" }
+    ],
+    desc: "Rare VLESS dedicated-line airport.",
+    descZh: "稀有 VLESS 专线机场。",
+    protocols: ["VLESS"],
+    tags: ["VLESS", "rare", "dedicated line"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "WaveNebula", nameZh: "电波星云 WaveNebula", slug: "wavenebula", url: "",
-    desc: "New dedicated-line. 403 Forbidden by WAF.", descZh: "新兴专线。", protocols: ["Shadowsocks", "AnyTLS"],
-    tags: ["emerging", "dedicated line", "custom client"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: "Site behind WAF."
+    name: "WaveNebula",
+    nameZh: "电波星云 WaveNebula",
+    links: [
+      { label: "Official", url: "https://wavenebula.net" }
+    ],
+    desc: "New dedicated-line. 403 Forbidden by WAF.",
+    descZh: "新兴专线。",
+    protocols: ["Shadowsocks", "AnyTLS"],
+    tags: ["emerging", "dedicated line", "custom client"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: "Site behind WAF."
   },
   {
-    name: "XSWL Cloud", nameZh: "XSWLCloud 笑死了", slug: "xswl", url: "",
-    desc: "Low-price high-volume route. Cheap.", descZh: "走低价便宜大碗路线。", protocols: ["VLESS"],
-    tags: ["low-price", "high-volume", "cheap"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: ""
+    name: "XSWL Cloud",
+    nameZh: "XSWLCloud 笑死了",
+    links: [
+      { label: "Official", url: "https://xswl.cloud" }
+    ],
+    desc: "Low-price high-volume route. Cheap.",
+    descZh: "走低价便宜大碗路线。",
+    protocols: ["VLESS"],
+    tags: ["low-price", "high-volume", "cheap"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "GodWorld", nameZh: "上帝世界 GodWorld", slug: "godworld", url: "",
-    desc: "2026 new. CN2 GIA / CMIN2 / 9929 optimized direct.", descZh: "2026新机场，CN2 GIA / 9929 / CMIN2 优化直连。", protocols: ["AnyTLS"],
-    tags: ["CN2 GIA", "CMIN2", "9929", "2026", "optimized direct"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: ""
+    name: "GodWorld",
+    nameZh: "上帝世界 GodWorld",
+    links: [
+      { label: "Official", url: "https://godworld.net" }
+    ],
+    desc: "2026 new. CN2 GIA / CMIN2 / 9929 optimized direct.",
+    descZh: "2026新机场，CN2 GIA / 9929 / CMIN2 优化直连。",
+    protocols: ["AnyTLS"],
+    tags: ["CN2 GIA", "CMIN2", "9929", "2026", "optimized direct"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Translink", nameZh: "Translink Cloud", slug: "translink", url: "",
-    desc: "2026 new airport. Site unresponsive.", descZh: "2026新开的机场。", protocols: ["VLESS", "AnyTLS"],
-    tags: ["2026", "multi-protocol"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: "Site may be down."
+    name: "Translink",
+    nameZh: "Translink Cloud",
+    links: [
+      { label: "Official", url: "https://translink.net" }
+    ],
+    desc: "2026 new airport. Site unresponsive.",
+    descZh: "2026新开的机场。",
+    protocols: ["VLESS", "AnyTLS"],
+    tags: ["2026", "multi-protocol"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: "Site may be down."
   },
   {
-    name: "Gopher Cloud", nameZh: "地鼠机场 DishuCloud", slug: "dishucloud", url: "",
-    desc: "2024 small airport. VLESS/Xray.", descZh: "2024小机场，VLESS(Xray)。", protocols: ["VLESS", "AnyTLS"],
-    tags: ["2024", "niche", "VLESS"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "Global", restrictions: ""
+    name: "Gopher Cloud",
+    nameZh: "地鼠机场 DishuCloud",
+    links: [
+      { label: "Official", url: "https://dishu.cloud" }
+    ],
+    desc: "2024 small airport. VLESS/Xray.",
+    descZh: "2024小机场，VLESS(Xray)。",
+    protocols: ["VLESS", "AnyTLS"],
+    tags: ["2024", "niche", "VLESS"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Scarlet Devil Mansion Airport", nameZh: "红魔馆机场", slug: "hongmowangluo", url: "",
-    desc: "VLESS. HK/JP/TW/SG/US nodes.", descZh: "VLESS，香港/日本/台湾/新加坡/美国节点。", protocols: ["VLESS"],
-    tags: ["multi-region", "VLESS", "PAYG"], payment: "Alipay",
-    pricing: [], speed: "Unlimited", nodes: "HK, JP, TW, SG, US", restrictions: ""
+    name: "Scarlet Devil Mansion Airport",
+    nameZh: "红魔馆机场",
+    links: [
+      { label: "Official", url: "https://hongmo.net" }
+    ],
+    desc: "VLESS. HK/JP/TW/SG/US nodes.",
+    descZh: "VLESS，香港/日本/台湾/新加坡/美国节点。",
+    protocols: ["VLESS"],
+    tags: ["multi-region", "VLESS", "PAYG"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "HK, JP, TW, SG, US",
+    restrictions: ""
   },
-{
-    name: "VC Meow", nameZh: "ＶＣ喵", slug: "vcmeow", url: "https://xn--iqv29x7pk.com?code=5kRn",
-    desc: "Decoded service. Features: IEPL lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "❤️❤️❤️█【ＶＣ喵】█　8元 / 48G / 月 起。始于 2017 ， 9 年海外运营，套餐只有月付！无需担心跑路☘️。在线客服团队支持☎️，小白友好。全 IEPL 专线覆盖 16 个国家 / 地区✈️，解锁 ChatGPT 等流媒体...", protocols: ["Shadowsocks"],
-    tags: ["IEPL", "beginner-friendly", "streaming unlock"], payment: "Alipay",
+  {
+    name: "VC Meow",
+    nameZh: "ＶＣ喵",
+    links: [
+      { label: "Official", url: "https://xn--iqv29x7pk.com" }
+    ],
+    desc: "IEPL lines, unlocking Netflix/Disney+/ChatGPT. 8元/48G/月起. Since 2017, 9 years overseas operation.",
+    descZh: "❤️❤️❤️█【ＶＣ喵】█　8元 / 48G / 月 起。始于 2017 ， 9 年海外运营。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL", "beginner-friendly", "streaming unlock"],
+    payment: "Alipay",
     pricing: [
       { name: "Entry", monthly: "¥8", traffic: "48G/mo", notes: "IEPL专线覆盖" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "16 countries",
+    restrictions: ""
   },
   {
-    name: "TomatoCloud", nameZh: "TomatoCloud", slug: "tomatocloud", url: "https://tomatocloud.com/account?action=register&code=caqB",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【TomatoCloud】 - 老牌鸡场、持续稳定境外运营多年,支援全球用户使用！节点保证可用ChatGPT、AI、流媒体解锁！全大陆中转、专线等线路，免费iOS下载ID，v2ray、ssr、trojan协议的120+高速节点，12小时客服...", protocols: ["Trojan", "Vmess"],
-    tags: ["dedicated line", "relay", "streaming unlock"], payment: "Alipay",
+    name: "TomatoCloud",
+    nameZh: "TomatoCloud",
+    links: [
+      { label: "Official", url: "https://tomatocloud.com" }
+    ],
+    desc: "Legacy airport, stable overseas operation. ChatGPT/AI/streaming unlock. 120+ high-speed nodes.",
+    descZh: "【TomatoCloud】 - 老牌鸡场、持续稳定境外运营多年。",
+    protocols: ["Trojan", "Vmess"],
+    tags: ["dedicated line", "relay", "streaming unlock"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "120+ nodes",
+    restrictions: ""
   },
   {
-    name: "FASTLINK", nameZh: "FASTLINK", slug: "fastlink", url: "https://s.yam.com/99Dbw",
-    desc: "Decoded service. Features: IPLC lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【FASTLINK】 -  老牌机场，实力验证，超级稳定，IPLC，Anycast ，中转技术应有尽有。不限设备数，解锁Netflix、Hulu、HBO、动画疯、TVB等流媒体。可定制独享专线...", protocols: ["Shadowsocks"],
-    tags: ["IPLC", "relay", "streaming unlock"], payment: "Alipay",
+    name: "FASTLINK",
+    nameZh: "FASTLINK",
+    links: [
+      { label: "Official", url: "https://fastlink.net" },
+      { label: "Short", url: "https://s.yam.com/99Dbw" }
+    ],
+    desc: "Legacy airport, super stable. IPLC, Anycast. Unlimited devices. Netflix/Hulu/HBO unlock.",
+    descZh: "【FASTLINK】 - 老牌机场，实力验证，超级稳定，IPLC，Anycast。",
+    protocols: ["Shadowsocks"],
+    tags: ["IPLC", "relay", "streaming unlock"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Red Apricot", nameZh: "红杏", slug: "go", url: "https://go.ftq.cc/",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "❤️❤️❤️【红杏】❤️❤️❤️ 全IEPL专线！❤️ 全IEPL专线！！❤️ 全IEPL专线！！！❤️ 20Gbps不限速！❤️无倍率❤️无套路❤️流媒体ChatGPT❤️ 海外运营17年！『十七周年庆』优惠卷：hx17years，全场1...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
+    name: "Red Apricot",
+    nameZh: "红杏",
+    links: [
+      { label: "Official", url: "https://go.ftq.cc" }
+    ],
+    desc: "Full IEPL dedicated line. 20Gbps unlimited speed. No rate multiplier. Overseas operation for 17 years.",
+    descZh: "❤️❤️❤️【红杏】❤️❤️❤️ 全IEPL专线！20Gbps不限速！海外运营17年！",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
     pricing: [],
-    speed: "20Gbps", nodes: "Global", restrictions: ""
+    speed: "20Gbps",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "52Cloud", nameZh: "52Cloud", slug: "52cloud", url: "https://v1.v52x.cc/#/register?code=EjHD",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✅️✅️✅️ 【52Cloud】本站专属优惠码: 52one 免费高速节点   6年老牌机场，50+地区国家，无倍率无套路，不限速不限设备，流量不限使用时间...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
+    name: "52Cloud",
+    nameZh: "52Cloud",
+    links: [
+      { label: "Official", url: "https://v1.v52x.cc" }
+    ],
+    desc: "6-year legacy airport. 50+ regions. No rate multiplier. Unlimited speed and devices.",
+    descZh: "✅️✅️✅️ 【52Cloud】6年老牌机场，50+地区国家，无倍率无套路。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "50+ nodes", restrictions: ""
+    speed: "Unlimited",
+    nodes: "50+ nodes",
+    restrictions: ""
   },
   {
-    name: "Big Brother Cloud", nameZh: "大哥云", slug: "dageyun", url: "https://dgy.dgywzc.com/#/register?code=4w7IK9Oi",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "【大哥云】✈️⏺⏺⏺,五年年稳定老牌机场...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "EEVPN", nameZh: "EEVPN", slug: "eevpn", url: "https://www.geteevpn.com/#/register?code=wdalKH4F",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "【EEVPN】★海外运营★支持ChatGPT★ 年付低至29.99元★全IEPL专线★最高5000Mbps速率★████████★知名老牌机场★海外实力团队★无倍率★无套路★████████▼▼▼点击下方注册▼▼▼████████...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
+    name: "EEVPN",
+    nameZh: "EEVPN",
+    links: [
+      { label: "Official", url: "https://www.geteevpn.com" }
+    ],
+    desc: "Overseas operation. ChatGPT support. Yearly as low as ¥29.99. Full IEPL. Up to 5000Mbps.",
+    descZh: "【EEVPN】★海外运营★支持ChatGPT★ 年付低至29.99元★全IEPL专线★最高5000Mbps。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
     pricing: [
       { name: "Yearly", monthly: "¥2.5", traffic: "N/A", notes: "年付低至 ¥29.99" }
     ],
-    speed: "5000Mbps", nodes: "Global", restrictions: ""
+    speed: "5000Mbps",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "CLOUDIE", nameZh: "CLOUDIE", slug: "cloudie", url: "https://home.cloudie.one",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "▼▼▼▼▼▼▼▼▼【CLOUDIE】-老牌营销专用线路。全专线入口，40+节点。稳定输出服务。原生IP，适合做外贸。稳定性高，可长期备用。████████████████████████...", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "40+ nodes", restrictions: ""
-  },
-  {
-    name: "Surboard", nameZh: "Surboard 冲浪板", slug: "surboard", url: "https://ww1.surboard.net",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✅️✅️✅️✅️【Surboard-冲浪板】-5年老牌营销专用线路。全专线入口，30+节点。稳定输出服务。原生IP，适合做外贸。稳定性高，可长期备用。✅️⬇️✴️✅...", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "30+ nodes", restrictions: ""
-  },
-  {
-    name: "Data Net", nameZh: "Data Net", slug: "datanet", url: "https://ww2.datanet.cc",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✅️✅️❇️❇️✅️✅️-【Data Net】@老牌专业外贸专线。原生IP全覆盖，IP干净，稀缺资源。全专线节点，稳定在线功能：【外贸营销专线】,【娱乐专线 | Netflix等流媒体原生支持】售后超好！</br>✅️✴️✅️✴️ ✅️✴️...", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Earthtor", nameZh: "Earthtor", slug: "earthtor", url: "https://ww2.earthtor.com",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✅️✅️✅️✅️✅️✅️✅️【Earthtor】全顶级中国入口，质量非常高的土豪线路,香港、台湾、泰国、马来、日本、欧美、迪拜、南非等中东国家原生ip线路,支持Tiktok.适合做海外营销的个人和团队。</br>...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "QuickLemon", nameZh: "快柠檬", slug: "quicklemon", url: "https://zept7bmddm.exnyv.cn/ep/s/ng677",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "【快柠檬】全客户端VPN，支持安卓/iOS/Windows/macOS，内置20+IEPL高速专线，下载安装试用2天，一键连接。低至19.8/月，可APP签到试用~...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥19.8", traffic: "N/A", notes: "20+IEPL专线" }
+    name: "CLOUDIE",
+    nameZh: "CLOUDIE",
+    links: [
+      { label: "Official", url: "https://home.cloudie.one" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "SpeedCAT", nameZh: "闪电猫 SpeedCAT", slug: "speedcat", url: "https://s.yam.com/JR87U",
-    desc: "Decoded service. Features: IPLC lines. Direct register.",
-    descZh: "【闪电猫-SPEEDCAT】闪电猫 SpeedCAT 是一家海外机场，重新定义科学上网，主打快速稳定，全专线IPLC，没有套路，承诺买多少给多少。...", protocols: ["Shadowsocks"],
-    tags: ["IPLC"], payment: "Alipay",
+    desc: "Legacy marketing dedicated line. Full dedicated line ingress. 40+ nodes. Native IP, suitable for foreign trade.",
+    descZh: "【CLOUDIE】-老牌营销专用线路。全专线入口，40+节点。原生IP，适合做外贸。",
+    protocols: ["Shadowsocks"],
+    tags: ["dedicated line"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "40+ nodes",
+    restrictions: ""
   },
   {
-    name: "Baby Cloud", nameZh: "宝贝云", slug: "baobeiyun", url: "http://101.133.239.232:8001/#/register?code=C5D297oX",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✅️✅️✅️【宝贝云】618限时折扣活动进行中!! ★★稳定ChatGPT,Gemini,Claude★★ ，极致流畅带来丝滑享受，流媒体全解锁，新疆可用，60+节点遍布全球30+国家，免费苹果id，八年老厂，新加坡实力团队，可按量付费...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
+    name: "Surboard",
+    nameZh: "Surboard 冲浪板",
+    links: [
+      { label: "Official", url: "https://ww1.surboard.net" }
+    ],
+    desc: "5-year legacy marketing dedicated line. Full dedicated line ingress. 30+ nodes. Native IP for foreign trade.",
+    descZh: "【Surboard-冲浪板】-5年老牌营销专用线路。全专线入口，30+节点。",
+    protocols: ["Shadowsocks"],
+    tags: ["dedicated line"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "60+ nodes", restrictions: "Xinjiang region supported."
+    speed: "Unlimited",
+    nodes: "30+ nodes",
+    restrictions: ""
   },
   {
-    name: "CuteCloud", nameZh: "CuteCloud 最萌の云", slug: "cutecloud", url: "https://check.cutecloudone.de/#/register?code=qpEY",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✅️【CuteCloud(最萌の云)】✅️老牌主力机场，可试用。顶级线路，解锁全面，不限制设备数。支持ChatGPT|NF|Disney+等流媒体和Ai服务，并提供相关的共享账户。速度与稳定性极佳，Youtube全天8K流畅。兼容性好，适配...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
+    name: "Data Net",
+    nameZh: "Data Net",
+    links: [
+      { label: "Official", url: "https://ww2.datanet.cc" }
+    ],
+    desc: "Legacy professional foreign trade dedicated line. Native IP coverage. Clean IP, scarce resource.",
+    descZh: "【Data Net】@老牌专业外贸专线。原生IP全覆盖，IP干净，稀缺资源。",
+    protocols: ["Shadowsocks"],
+    tags: ["dedicated line"],
+    payment: "Alipay",
     pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Topology Gate", nameZh: "拓扑门", slug: "tuopumen", url: "https://aooc.cc/",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "█████【强力推荐---拓扑门】不限流量★IEPL 专线★5元100G...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
+    name: "Earthtor",
+    nameZh: "Earthtor",
+    links: [
+      { label: "Official", url: "https://ww2.earthtor.com" }
+    ],
+    desc: "Top-tier China ingress. High-quality premium lines. HK, TW, Thailand, Malaysia, JP, Europe, Dubai, South Africa native IP.",
+    descZh: "【Earthtor】全顶级中国入口，质量非常高的土豪线路。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "SpeedCAT",
+    nameZh: "闪电猫 SpeedCAT",
+    links: [
+      { label: "Official", url: "https://speedcat.net" },
+      { label: "Short", url: "https://s.yam.com/JR87U" }
+    ],
+    desc: "Overseas airport. Full IPLC dedicated line. No tricks. Buy what you get.",
+    descZh: "【闪电猫-SPEEDCAT】海外机场，主打快速稳定，全专线IPLC。",
+    protocols: ["Shadowsocks"],
+    tags: ["IPLC"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "SnailLink",
+    nameZh: "蜗牛云",
+    links: [
+      { label: "Official", url: "https://8.217.75.79:1000" }
+    ],
+    desc: "Legacy airport branch. Full IEPL dedicated line. Minimum ¥10/month. 2-hour 5G trial on registration.",
+    descZh: "【SnailLink（蜗牛云）】老牌机场分站，全IEPL专线｜最低10元/月｜注册送2小时5G试用。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL", "trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "CuteCloud",
+    nameZh: "CuteCloud 最萌の云",
+    links: [
+      { label: "Official", url: "https://cutecloud.net" }
+    ],
+    desc: "Legacy main airport, trial available. Top-tier lines, full unlock. Unlimited devices. ChatGPT/Netflix/Disney+ support.",
+    descZh: "【CuteCloud(最萌の云)】老牌主力机场，可试用。顶级线路，解锁全面，不限制设备数。",
+    protocols: ["Shadowsocks"],
+    tags: ["streaming unlock"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "4K/8K streaming support",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "CokeCloud",
+    nameZh: "可乐云",
+    links: [
+      { label: "Official", url: "https://coweb.jjjxgc.com" }
+    ],
+    desc: "Fast speed, stable nodes. Legacy airport. Customizable native gigabit dedicated nodes. ¥9.9 for 400G.",
+    descZh: "【CokeCloud(可乐云)】主打速度快，节点稳老牌机场，可定制原生千兆独享节点。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Baby Cloud",
+    nameZh: "宝贝云",
+    links: [
+      { label: "Official", url: "https://hi.xn--mes358a4ues53b.com" }
+    ],
+    desc: "618 discount ongoing. Stable ChatGPT/Gemini/Claude. Full streaming unlock. Xinjiang supported. 8-year legacy.",
+    descZh: "【宝贝云】618限时折扣活动进行中!! ★★稳定ChatGPT,Gemini,Claude★★。",
+    protocols: ["Shadowsocks"],
+    tags: ["streaming unlock"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "60+ nodes",
+    restrictions: "Xinjiang region supported."
+  },
+  {
+    name: "Magic Ring",
+    nameZh: "魔戒.NET",
+    links: [
+      { label: "Official", url: "https://xn--zuup71g88ae4i.com" }
+    ],
+    desc: "5-year stable operation. First pure-traffic-billing airport. No rate multiplier. ¥1 trial.",
+    descZh: "【魔戒.NET】稳定运营5年 首家纯流量计费模式机场 无倍率 无套路。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "White Rabbit",
+    nameZh: "白兔机场",
+    links: [
+      { label: "Official", url: "https://nb.baitufacai.com" }
+    ],
+    desc: "4-platform client support. 100+ global nodes. Full streaming unlock. 24-hour manual customer service.",
+    descZh: "【白兔机场】支持四端客户端，全球100+节点，流媒体全解锁。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "100+ nodes",
+    restrictions: ""
+  },
+  {
+    name: "KeKe Cloud",
+    nameZh: "可可云",
+    links: [
+      { label: "Official", url: "https://coweb.jjjxgc.com" }
+    ],
+    desc: "Full IEPL dedicated line airport. No rate multiplier. Stable streaming/ChatGPT unlock. 4K instant.",
+    descZh: "【可可云】全IEPL专线机场 · 无倍率 稳定解锁流媒体/ChatGPT。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Topology Gate",
+    nameZh: "拓扑门",
+    links: [
+      { label: "Official", url: "https://aooc.cc" }
+    ],
+    desc: "Unlimited traffic. IEPL dedicated line. ¥5 for 100G. GPT/Gemini/TikTok/Netflix. Free permanent nodes on registration.",
+    descZh: "【强力推荐---拓扑门】不限流量★IEPL专线★5元100G。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL", "trial"],
+    payment: "Alipay",
     pricing: [
       { name: "Entry", monthly: "¥5", traffic: "100G/mo", notes: "IEPL专线" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Xunfei Cloud", nameZh: "讯飞云", slug: "xunfeiyun", url: "https://www.xstart.cc",
-    desc: "Decoded service. Features: IPLC lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "⚡⚡⚡【讯飞云】⚡⚡⚡ ✅顶级三网优化专线 ｜ ✅低延迟高并发 ｜ ✅8K秒开不卡顿 ｜ ✅小众国家多｜ | ✴️优惠码：四大皆空 ｜ ❤️全球流媒体 + AI 服务全解锁 ｜ ████████★专线定制----原生纯净IP❤️❤️IPLC...", protocols: ["Shadowsocks"],
-    tags: ["IPLC", "BGP", "streaming unlock"], payment: "Alipay",
+    name: "Miaona",
+    nameZh: "Miaona!",
+    links: [
+      { label: "Official", url: "https://miaona.app" }
+    ],
+    desc: "Full IEPL dedicated line airport. Three-network optimization. High speed stable. Cold region nodes included.",
+    descZh: "【Miaona!】全IEPL专线机场！三网优化 高速稳定、流量不过墙！",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
     pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "PumpkinCloud", nameZh: "Pumpkin Cloud", slug: "pumpkincloud", url: "https://pumpkin369.cc",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "█❤️全新协议，更稳更快❤️█新用户免费用7天❤️支持GPT/Gemini，月卡3.6元/半年卡19.8元/29.8永久套餐██【★TK/AI/游戏专线定制--IP纯净易推流不封号★】《全球100+节点》人工客服/售后无忧❤️特惠码：新谷歌...", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
+    name: "Pangolin",
+    nameZh: "穿山甲",
+    links: [
+      { label: "Official", url: "https://aff01.csj2025.com" }
+    ],
+    desc: "Unlimited time plans. Unlimited devices. Use until traffic exhausted. ChatGPT/streaming unlock. No registration verification.",
+    descZh: "【穿山甲】不限时套餐｜不限设备｜流量用完为止。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "World Window",
+    nameZh: "世界之窗.com",
+    links: [
+      { label: "Official", url: "https://s100.987345.xyz" }
+    ],
+    desc: "50+ regions. No rate multiplier. Native IP / residential IP. ChatGPT + Netflix + Disney+ full unlock.",
+    descZh: "【世界之窗.com】50+地区国家，无倍率无套路，原生IP住宅IP。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "50+ nodes",
+    restrictions: ""
+  },
+  {
+    name: "Pumpkin",
+    nameZh: "Pumpkin Cloud",
+    links: [
+      { label: "Official", url: "https://pumpkin369.cc" }
+    ],
+    desc: "New protocol, more stable and faster. 7-day free trial for new users. GPT/Gemini support. Monthly ¥3.6.",
+    descZh: "█❤️全新协议，更稳更快❤️█新用户免费用7天❤️支持GPT/Gemini。",
+    protocols: ["Shadowsocks"],
+    tags: ["dedicated line", "trial"],
+    payment: "Alipay",
     pricing: [
       { name: "Monthly", monthly: "¥3.6", traffic: "N/A", notes: "全新协议" },
       { name: "6-Month", monthly: "¥3.3", traffic: "N/A", notes: "¥19.8/6mo" },
       { name: "Lifetime", monthly: "¥29.8", traffic: "N/A", notes: "One-time payment" }
     ],
-    speed: "Unlimited", nodes: "100+ nodes", restrictions: ""
+    speed: "Unlimited",
+    nodes: "100+ nodes",
+    restrictions: ""
   },
   {
-    name: "xinAMD", nameZh: "xinAMD", slug: "xinamd", url: "https://aooc.cc/",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✴️✴️✴️✴️✴️✴️【xinAMD】✅️1元永久✅️3元/T✴️不限流量✴️免费试用✴️✴️✴️✴️✴️✴️✴️✴️✴️✴️...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [
-      { name: "Lifetime", monthly: "¥1", traffic: "Unlimited", notes: "永久不限流量" },
-      { name: "PAYG", monthly: "¥3", traffic: "1TB", notes: "3元/T" }
+    name: "Xunfei Cloud",
+    nameZh: "讯飞云",
+    links: [
+      { label: "Official", url: "https://www.xstart.cc" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "CokeCloud", nameZh: "CokeCloud 可乐云", slug: "cokecloud", url: "http://8.134.219.80/index.html",
-    desc: "Decoded service. Features: IPLC lines. Direct register.",
-    descZh: "【CokeCloud(可乐云)】主打速度快，节点稳老牌机场，可定制原生千兆独享节点，亦有9.9元超值400G流量不限速，youtube全天4K&ChatGPT，IPLC专线线路,专属客户端。▼▼点击下方注册购买,无需验证...", protocols: ["Shadowsocks"],
-    tags: ["IPLC"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥9.9", traffic: "400G/mo", notes: "IPLC专线" }
-    ],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Miaona", nameZh: "Miaona!", slug: "miaona", url: "https://miaona.app",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "❤️❤️❤️【Miaona!】❤️❤️❤️全IEPL专线机场 ！三网优化 高速稳定、流量不过墙！ 包含部分冷门地区节点...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
+    desc: "Top-tier three-network optimization dedicated line. Low latency high concurrency. 8K instant. Many niche countries.",
+    descZh: "【讯飞云】顶级三网优化专线｜低延迟高并发｜8K秒开不卡顿。",
+    protocols: ["Shadowsocks"],
+    tags: ["IPLC", "BGP", "streaming unlock"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "4K/8K streaming support",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Magic Ring .NET", nameZh: "魔戒 .NET", slug: "mojie", url: "https://xn--zuup71g88ae4i.com/?code=JAMKa9G8",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✈️【魔戒.NET】✈️    稳定运营5年 首家纯流量计费模式机场 无倍率 无套路  ☎️人工客服 1️⃣元即可体验...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [
-      { name: "Trial", monthly: "¥1", traffic: "N/A", notes: "1元体验" }
+    name: "Skylumo",
+    nameZh: "Skylumo",
+    links: [
+      { label: "Official", url: "https://skylumo.cc" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Autumn Forest Cloud", nameZh: "秋林云", slug: "qiulinyun", url: "https://www.qiulinyun.online/register?code=SHtzdIZc",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【官方推荐】▼▼秋林云▼▼老牌机场不跑路， 套餐低至5元/月！主打稳定高速实惠，业界良心，全lvess+hy2节点，不限制设备数，免费提供苹果ID，解锁ChatGPT及各种流媒体,有客户端一键链接！...", protocols: ["Hysteria"],
-    tags: ["streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥5", traffic: "N/A", notes: "低至5元/月" }
-    ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "SoonVPN", nameZh: "SoonVPN 瞬连", slug: "soonvpn", url: "https://soontg.kbr1g.com/",
-    desc: "Decoded service. Features: IPLC lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【SoonVPN（瞬连）】最低每月1.49美元（人民币10元），全IPLC精品线路、支持全球使用、自主开发客户端、主打各地区原生IP或原生解锁，支持各流媒体。...", protocols: ["Shadowsocks"],
-    tags: ["IPLC", "streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥10", traffic: "N/A", notes: "最低每季度 $1.49 (约¥10)" }
-    ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "SnailLink", nameZh: "SnailLink 蜗牛云", slug: "snaillink", url: "https://8.217.75.79:1000/register?code=f51sW4Ms",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "【SnailLink（蜗牛云）】老牌机场分站，全IEPL专线｜最低10元/月｜注册送2小时5G试用｜免邮箱验证｜新开业8折优惠码:off20fornew...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥10", traffic: "N/A", notes: "全IEPL专线" }
-    ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Super Quality Airport", nameZh: "超优质机场", slug: "chaoyouzhi", url: "https://s.yam.com/F3nI7",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【超优质机场】全自研高速轻量协议，晚高峰高速稳定，不限速，不限设备数，支持个人及团队使用！解锁Netflix, Disney+, Abema等所有流媒体，支持ChatGPT, Claude, Meta AI等所有AI。实时客服回复，有问题可...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
+    desc: "Minimum ¥9.9/year. Free Google AI PRO year. 99.99 yuan for 99999G unlimited time. 7-year legacy.",
+    descZh: "✅认证优选✅最低9.9/年！送谷歌AI PRO年费！99.99元，99999G不限时。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "80+ regions",
+    restrictions: ""
   },
   {
-    name: "AirRocket", nameZh: "Air rocket 火箭", slug: "airrocket", url: "https://airrocketgear.top/?path=register&code=coKJ6Hfs",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✔️❤️推荐❤️✔️【Air rocket火箭3年老机场】☁️❇️（关闭代理打开页面注册）❤️✔️包月价格9.9✔️注册可试用。全中转4k秒开，GPT等全解锁,最高5000Mbps速率可用,价格亲民优惠码8888年付8折...", protocols: ["Shadowsocks"],
-    tags: ["relay", "streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥9.9", traffic: "N/A", notes: "全中转线路" }
+    name: "Wormhole",
+    nameZh: "虫洞加速",
+    links: [
+      { label: "Official", url: "https://chongdong02.app" }
     ],
-    speed: "5000Mbps", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Pangolin", nameZh: "穿山甲", slug: "chuanshanjia", url: "https://aff01.csj2025.com/#/register?code=kZ6wwCEb",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "✴️✴️✴️【穿山甲】不限时套餐｜不限设备...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
+    desc: "Full BGP enterprise-grade IEPL dedicated line. Extreme stability. 4K instant. Monthly ¥19 for 200G. Annual ¥199.",
+    descZh: "【虫洞加速】全BGP企业级IEPL专线·极速稳定·全平台秒开4K。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Urgent Dog", nameZh: "狗急加速", slug: "gouji", url: "https://main.goj2025.com/#/register?code=LCIyBKR0",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "⭐⭐⭐⭐【狗急加速】不限流 ❤️不限速 ❤️不限设备 ❤️新用户可流量计费 全平台支持,高峰期一样稳定...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "ParkSpeed", nameZh: "帕克加速.com", slug: "parkspeed", url: "https://xn--74q55am5wco4c.com/",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "⏩❇️老司机力荐❇️⏪【帕克加速.com】❤️低至7元/月❤️自有客户端❤️5年老牌机场❤️原生IP...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥7", traffic: "N/A", notes: "IEPL专线" }
+    name: "Five Trees Cloud",
+    nameZh: "五树云机场",
+    links: [
+      { label: "Official", url: "https://s.yam.com/XHvA3" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    desc: "Full IPLC dedicated line + 50 nodes + 8K smooth playback. ChatGPT + Netflix + Disney+ full unlock.",
+    descZh: "【五树云机场】全IPLC专线 + 50节点 + 8K流畅播放。",
+    protocols: ["Shadowsocks"],
+    tags: ["IPLC"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "50+ nodes",
+    restrictions: ""
   },
   {
-    name: "Skylumo", nameZh: "Skylumo", slug: "skylumo", url: "https://skylumo.cc/",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✅认证优选✅最低9.9/年！送谷歌AI PRO年费！人手必备的大流量套餐。99.99元，99999G不限时，用完即止（原价299），7年大厂！<p>██【解锁流媒体】❤️80+地区，优惠券：pFkH4JED❤️【全匿名机场丨无验证】...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Yearly", monthly: "¥0.8", traffic: "N/A", notes: "¥9.9/yr" },
-      { name: "Big Pack", monthly: "¥99.99", traffic: "99999G", notes: "不限时" }
+    name: "HaiLian Cloud",
+    nameZh: "海连云机场",
+    links: [
+      { label: "Official", url: "https://hi.xn--mes358a4ues53b.com" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    desc: "Massive connection encrypted dedicated internet data. Global quality nodes. ¥5 for 100G, ¥35 for 10000G.",
+    descZh: "【海连云机场】海量连接加密专用互联网数据▼套餐5元100G，35元10000G。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Cyber Express", nameZh: "网际快车", slug: "wangjikuaiche", url: "https://su.xn--66tw07h.com/?c=FEUFBG",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "⭐网际快车⭐多线路确保不断流，流量不过期，不限设备数...", protocols: ["Shadowsocks"],
-    tags: [], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥6.8", traffic: "N/A", notes: "住宅IP" }
+    name: "Zero Yuan Airport",
+    nameZh: "零元机场",
+    links: [
+      { label: "Official", url: "https://nb.baitufacai.com" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    desc: "New users free high-speed node trial. Easy streaming and overseas website unlock. Penetrating dedicated line.",
+    descZh: "【零元机场】新用户可免费体验高速节点服务✔️轻松解锁流媒体。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Wormhole", nameZh: "虫洞加速", slug: "chongdong", url: "https://chongdong02.app/#/register?code=ukIYmSCD",
-    desc: "Decoded service. Features: IEPL lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✅【虫洞加速】全BGP企业级IEPL专线 · 极速稳定 · 全平台秒开4K · ChatGPT / 奈飞 / Disney+ 全解锁 · 月付19元 200G· 年付199元 · 无倍率...", protocols: ["Shadowsocks"],
-    tags: ["IEPL", "BGP", "streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Monthly", monthly: "¥19", traffic: "200G/mo", notes: "BGP企业级专线" },
-      { name: "Yearly", monthly: "¥16.6", traffic: "200G/mo", notes: "¥199/yr" }
+    name: "One Yuan Accelerator",
+    nameZh: "一元加速器",
+    links: [
+      { label: "Official", url: "https://hi.xn--mes358a4ues53b.com" }
     ],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Five Trees Cloud", nameZh: "五树云机场", slug: "wushuyun", url: "https://s.yam.com/XHvA3",
-    desc: "Decoded service. Features: IPLC lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【五树云机场】██████ 全专线机场震撼来袭! ✅不限速✅不限设备✅全IPLC专线 + 50节点 + 8K流畅播放，ChatGPT + Netflix + Disney+等全解锁，别说你还在用免费节点！</br>███这是机场中的战斗机✈...", protocols: ["Shadowsocks"],
-    tags: ["IPLC", "streaming unlock"], payment: "Alipay",
+    desc: "Only one yuan for high-speed acceleration. Multi-platform client. 40+ nodes. 30% referral rebate.",
+    descZh: "【一元加速器】仅需一元即可体验高速加速服务☁40+节点。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
     pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
+    speed: "Unlimited",
+    nodes: "40+ nodes",
+    restrictions: ""
   },
   {
-    name: "Stable Link Cloud", nameZh: "稳联云", slug: "wenlianyun", url: "https://pub01.sp0608.xyz/#/register?code=o8WMGHeO",
-    desc: "Decoded service. Features: IEPL lines, unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【稳联云】 - 老牌机场，海外运营，主打稳定高速实惠。解锁Netflix等众多流媒体; 支持ChatGPT、Gemini、 Grok等等; 9.9元享受极速IEPL专线; 节点多协议支持，大量Hysteria2节点; 适配v2rayN/NG...", protocols: ["Hysteria", "Vmess"],
-    tags: ["IEPL", "streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥9.9", traffic: "N/A", notes: "极速IEPL专线" }
+    name: "Gouji Accelerator",
+    nameZh: "狗急加速",
+    links: [
+      { label: "Official", url: "https://main.goj2025.com" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Window of the World.com", nameZh: "世界之窗.com", slug: "shijiezhichuang", url: "https://s100.987345.xyz",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【世界之窗.com】50+地区国家，无倍率无套路，原生IP住宅IP，ChatGPT + Netflix + Disney+等流媒体全解锁，不限速不限设备，流量不限使用时间...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
+    desc: "Unlimited flow, speed, devices. New users can use pay-as-you-go. Full platform support. Stable even at peak.",
+    descZh: "【狗急加速】不限流❤不限速❤不限设备❤新用户可流量计费。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
     pricing: [],
-    speed: "Unlimited", nodes: "50+ nodes", restrictions: ""
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "P1Cloud", nameZh: "P1云", slug: "p1cloud", url: "https://bieshawo321.top?path=register&code=X3vhUu56",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "❇️P1云❇️真·多线中转加速❇️多协议加持❇️晚高峰4K完美不卡顿❇️无倍率套路❇️可试用❇️免梯登录❇️...", protocols: ["Shadowsocks"],
-    tags: ["relay"], payment: "Alipay",
-    pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Coco Cloud", nameZh: "可可云", slug: "kekeyun", url: "https://coweb.jjjxgc.com/#/register?code=4j4DuMD8",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "✅【可可云】｜全 IEPL 专线机场 · 无倍率...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "DengtaCloud", nameZh: "灯塔Cloud", slug: "dengtacloud", url: "https://dengta.feishu-open.com/register?code=NZSr1mMG",
-    desc: "Decoded service. Features: IEPL lines. Direct register.",
-    descZh: "✅ [官方推荐] 【灯塔Cloud】：三线IEPL专线 4K 极速✅晚高峰不限速 | 4K 极速秒开 | 稳定首选...", protocols: ["Shadowsocks"],
-    tags: ["IEPL"], payment: "Alipay",
-    pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Whisper Cloud", nameZh: "轻语机场", slug: "qingyuyun", url: "https://www.lajiaoyun.xyz/#/register?code=0t21Stac",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "【轻语机场】 新用户注册赠送2小时5G流量,顶级线路海外中转,晚高峰不限速 | 4K 极速秒开 | 稳定首选 ━ 晚高峰不卡顿,解锁 ChatGPT 等流媒体,赠送emby...", protocols: ["Shadowsocks"],
-    tags: ["relay", "streaming unlock"], payment: "Alipay",
-    pricing: [],
-    speed: "4K/8K streaming support", nodes: "Global", restrictions: ""
-  },
-  {
-    name: "Landscape Cloud", nameZh: "山水云", slug: "shanshuiyun", url: "https://ss2.byvvcsx.com/#/register?code=MX6ZSIhX",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "✅✅✅【山水云】优惠码:2026888 ★★★稳定ChatGPT,Netflix,★★★ ，极致流畅带来丝滑享受，流媒体全解锁，新疆不可用，70+节点遍布全球25+国家，免费苹果id，3年老厂，海外实力团队...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "70+ nodes", restrictions: "Xinjiang region not supported."
-  },
-  {
-    name: "Second-by-Second Cloud", nameZh: "秒秒云", slug: "miaomiaoyun", url: "https://dl2.mmy8.com/#/register?code=natKgnpe",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "????????????【秒秒云】8折优惠码：2026888 ★★★ 稳定ChatGPT，Netflix，★★★，极致流畅带来丝滑享受，流媒体全解锁，新疆不可用，免费提供苹果id，老机场用的更放心...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
-    pricing: [],
-    speed: "Unlimited", nodes: "Global", restrictions: "Xinjiang region not supported."
-  },
-  {
-    name: "White Rabbit Cloud", nameZh: "白兔云", slug: "baituyun", url: "https://nb.baitufacai.com/#/register?code=5k3MFXN6",
-    desc: "Decoded service. Features: unlocking Netflix/Disney+/ChatGPT. Direct register.",
-    descZh: "⚡⚡⚡【白兔机场】⚡⚡⚡支持四端客户端⚡⚡⚡全球100+节点⚡⚡⚡流媒体全解锁 ⚡⚡⚡☎️24小时人工客服⚡⚡⚡★不限速★无套路★⚡⚡⚡████████████████...", protocols: ["Shadowsocks"],
-    tags: ["streaming unlock"], payment: "Alipay",
-    pricing: [
-      { name: "Light", monthly: "¥7", traffic: "100G/mo", notes: "三网优化" },
-      { name: "Basic", monthly: "¥10", traffic: "200G/mo", notes: "三网优化" },
-      { name: "Standard", monthly: "¥20", traffic: "500G/mo", notes: "三网优化" },
-      { name: "Unlimited", monthly: "¥100", traffic: "Unlimited", notes: "不限量" }
+    name: "P1 Cloud",
+    nameZh: "P1云",
+    links: [
+      { label: "Official", url: "https://bieshawo321.top" }
     ],
-    speed: "Unlimited", nodes: "100+ nodes", restrictions: ""
+    desc: "True multi-line transit acceleration. Multi-protocol support. 4K perfect at peak. No rate tricks. Trial available.",
+    descZh: "【P1云】真·多线中转加速❇️多协议加持❇️晚高峰4K完美不卡顿。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   },
   {
-    name: "Sea-Link Cloud", nameZh: "海连云机场", slug: "hailianyun", url: "https://hi.xn--mes358a4ues53b.com/#/register?code=Poc7Zmp4",
-    desc: "Decoded service. Features: stable connections. Direct register.",
-    descZh: "⚡⚡⚡【官方推荐老牌机场】⚡⚡⚡稳定运营8年⚡⚡⚡三网国际专线⚡⚡⚡无日志记录⚡⚡⚡提供在线客服⚡⚡⚡冷门国家众多⚡⚡⚡████████████████...", protocols: ["Shadowsocks"],
-    tags: ["dedicated line"], payment: "Alipay",
-    pricing: [
-      { name: "Entry", monthly: "¥5", traffic: "100G/mo", notes: "专线数据" },
-      { name: "Big Pack", monthly: "¥35", traffic: "10000G", notes: "10TB流量" }
+    name: "Lighthouse Cloud",
+    nameZh: "灯塔Cloud",
+    links: [
+      { label: "Official", url: "https://dengta.feishu-open.com" }
     ],
-    speed: "Unlimited", nodes: "Global", restrictions: ""
+    desc: "Three-line IEPL dedicated line. 4K extreme speed. No speed limit at peak. 40% off code: V666.",
+    descZh: "【灯塔Cloud】：三线IEPL专线 4K 极速✅晚高峰不限速。",
+    protocols: ["Shadowsocks"],
+    tags: ["IEPL"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Shanshui Cloud",
+    nameZh: "山水云",
+    links: [
+      { label: "Official", url: "https://ss2.byvvcsx.com" }
+    ],
+    desc: "Stable ChatGPT/Netflix. 70+ nodes across 25+ countries. Free Apple ID. 3-year legacy.",
+    descZh: "【山水云】稳定ChatGPT,Netflix，70+节点遍布全球25+国家，3年老厂。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "70+ nodes",
+    restrictions: ""
+  },
+  {
+    name: "xinAMD",
+    nameZh: "xinAMD",
+    links: [
+      { label: "Official", url: "https://aooc.cc" }
+    ],
+    desc: "¥1 permanent. ¥3/T. Unlimited traffic. Free trial. No verification registration.",
+    descZh: "【xinAMD】✅️1元永久✅️3元/T✴️不限流量✴️免费试用。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Qingyu Airport",
+    nameZh: "轻语机场",
+    links: [
+      { label: "Official", url: "https://www.lajiaoyun.xyz" }
+    ],
+    desc: "New users get 2-hour 5G traffic. Top-tier overseas transit. No speed limit at peak. 4K instant. Emby included.",
+    descZh: "【轻语机场】新用户注册赠送2小时5G流量,顶级线路海外中转。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Miaomiao Cloud",
+    nameZh: "秒秒云",
+    links: [
+      { label: "Official", url: "https://dl2.mmy8.com" }
+    ],
+    desc: "20% off code: 2026888. Stable ChatGPT/Netflix. Free Apple ID. Legacy airport.",
+    descZh: "【秒秒云】8折优惠码：2026888 ★★★ 稳定ChatGPT，Netflix。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Air Rocket",
+    nameZh: "Air Rocket 火箭",
+    links: [
+      { label: "Official", url: "https://airrocketgear.top" }
+    ],
+    desc: "3-year legacy airport. Monthly ¥9.9. Trial on registration. Full transit 4K instant. GPT unlock. 5000Mbps.",
+    descZh: "【Air rocket火箭3年老机场】包月价格9.9✔️注册可试用。",
+    protocols: ["Shadowsocks"],
+    tags: ["trial"],
+    payment: "Alipay",
+    pricing: [],
+    speed: "5000Mbps",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Autumn Forest Cloud",
+    nameZh: "秋林云",
+    links: [
+      { label: "Official", url: "https://hi.xn--mes358a4ues53b.com" }
+    ],
+    desc: "Legacy airport won't run away. Plans as low as ¥5/month. Stable high speed. Industry conscience. Free Apple ID.",
+    descZh: "【秋林云】老牌机场不跑路，套餐低至5元/月！主打稳定高速实惠。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
+  },
+  {
+    name: "Stable Cloud",
+    nameZh: "稳联云",
+    links: [
+      { label: "Official", url: "https://nb.baitufacai.com" }
+    ],
+    desc: "Legacy airport, overseas operation. Stable high speed affordable. Netflix unlock. ChatGPT/Gemini/Grok. ¥9.9 IEPL.",
+    descZh: "【稳联云】- 老牌机场，海外运营，主打稳定高速实惠。",
+    protocols: ["Shadowsocks"],
+    tags: [],
+    payment: "Alipay",
+    pricing: [],
+    speed: "Unlimited",
+    nodes: "Global",
+    restrictions: ""
   }
-
 ];
 
-const allData = [
-  ...top8.map(s => ({...s, tier: 'top'})),
-  ...legacy.map(s => ({...s, tier: 'legacy'})),
-  ...testing.map(s => ({...s, tier: 'new'}))
-];
+// ============ HELPER FUNCTIONS ============
 
-// ===== NUMERIC PARSERS =====
 function parsePriceMonthly(str) {
-  if (!str || str === '—') return Infinity;
-  const yuan = str.match(/¥\s*([0-9.]+)/);
-  if (yuan) return parseFloat(yuan[1]);
-  const usd = str.match(/\$\s*([0-9.]+)/);
-  if (usd) return parseFloat(usd[1]) * 7.2; // Approximate USD to CNY
-  return Infinity;
+  if (!str) return null;
+  let m = str.match(/¥(\d+(?:\.\d+)?)/);
+  if (m) return parseFloat(m[1]);
+  m = str.match(/\$(\d+(?:\.\d+)?)/);
+  if (m) return parseFloat(m[1]) * 7.2;
+  return null;
 }
 
 function parseTrafficMonthly(str) {
-  if (!str) return 0;
-  if (/unlimited/i.test(str)) return 10000;
-  const yr = str.match(/([0-9.]+)\s*G\s*\/\s*yr/i);
-  if (yr) return parseFloat(yr[1]) / 12;
-  const onetime = str.match(/一次性|one-time/i);
-  if (onetime) return 0;
-  const mo = str.match(/([0-9.]+)\s*G/i);
-  return mo ? parseFloat(mo[1]) : 0;
+  if (!str) return null;
+  str = str.replace(/\s+/g, '');
+  if (/unlimited/i.test(str) || /不限/i.test(str)) return Infinity;
+  let m = str.match(/(\d+(?:\.\d+)?)\s*(G|GiB|GB)/i);
+  if (!m) return null;
+  let val = parseFloat(m[1]);
+  if (/\/yr/i.test(str) || /\/年/.test(str)) return val / 12;
+  if (/one-time/i.test(str) || /一次性/.test(str) || /不限时/.test(str)) return null;
+  return val;
 }
 
 function parseSpeed(str) {
-  if (!str) return 0;
-  const highBandwidthWords = /IEPL|专线|high bandwidth|guaranteed/i;
-  const hasNumber = /[0-9]/.test(str);
-  if (!hasNumber && highBandwidthWords.test(str)) return 1000;
-  const normalized = str.replace(/[–—]/g, '-');
-  const matches = [...normalized.matchAll(/([0-9.]+)\s*(Gbps|G|Mbps|M)\b/gi)];
-  if (matches.length === 0) return 0;
-  let maxVal = 0;
-  for (const m of matches) {
-    let val = parseFloat(m[1]);
-    if (m[2].toLowerCase().startsWith('g')) val *= 1000;
-    if (val > maxVal) maxVal = val;
-  }
-  return maxVal;
+  if (!str) return null;
+  const m = str.match(/(\d+(?:\.\d+)?)\s*(Gbps|Mbps|Mb\/s)/i);
+  if (!m) return null;
+  let val = parseFloat(m[1]);
+  if (/gbps/i.test(m[2])) val *= 1000;
+  return val;
 }
 
 function getBestPlan(s) {
-  if (!s.pricing || s.pricing.length === 0) return null;
-  const valid = s.pricing.filter(p => parsePriceMonthly(p.monthly) < Infinity);
-  if (valid.length === 0) return s.pricing[0];
-  return valid.sort((a, b) => parseTrafficMonthly(b.traffic) - parseTrafficMonthly(a.traffic))[0];
+  if (!s.pricing || !s.pricing.length) return null;
+  return s.pricing
+    .filter(p => parsePriceMonthly(p.monthly) !== null && parseTrafficMonthly(p.traffic) !== null)
+    .sort((a, b) => (parseTrafficMonthly(b.traffic) || 0) - (parseTrafficMonthly(a.traffic) || 0))[0] || null;
 }
 
-function getSortValue(s, sortKey) {
-  const plan = getBestPlan(s);
-  if (!plan) {
-    if (sortKey === 'price') return Infinity;
-    if (sortKey === 'traffic') return 0;
-    if (sortKey === 'speed') return parseSpeed(s.speed);
-    if (sortKey === 'value') return getValueScore(s);
-    return 0;
-  }
-  if (sortKey === 'price') return parsePriceMonthly(plan.monthly);
-  if (sortKey === 'traffic') return parseTrafficMonthly(plan.traffic);
-  if (sortKey === 'speed') return parseSpeed(s.speed);
-  if (sortKey === 'value') return getValueScore(s);
-  return 0;
-}
-
-// ===== STANDARDIZED VALUES =====
 function getPricePerGb(s) {
   const plan = getBestPlan(s);
   if (!plan) return null;
   const price = parsePriceMonthly(plan.monthly);
   const traffic = parseTrafficMonthly(plan.traffic);
-  if (traffic <= 0 || price === Infinity) return null;
-  if (traffic >= 9999) return 0;
-  return price / traffic;
+  if (!price || !traffic) return null;
+  return traffic === Infinity ? 0 : price / traffic;
 }
 
 function getValueScore(s) {
-  const ppg = getPricePerGb(s);
-  if (ppg === null) return 0;
-  if (ppg === 0) return 100;
-  return 1 / ppg;
-}
-
-function formatPricePerGb(s) {
-  const ppg = getPricePerGb(s);
-  if (ppg === null) return '—';
-  if (ppg === 0) return 'Unlimited';
-  if (ppg < 1) return '¥' + ppg.toFixed(2) + '/GB';
-  return '¥' + ppg.toFixed(1) + '/GB';
-}
-
-function formatValueScore(s) {
-  const score = getValueScore(s);
-  if (score <= 0) return '—';
-  if (score >= 99) return '∞';
-  if (score >= 10) return score.toFixed(0) + ' GB/¥';
-  if (score >= 1) return score.toFixed(1) + ' GB/¥';
-  return score.toFixed(2) + ' GB/¥';
-}
-
-// ===== MATCH LOGIC =====
-let currentSort = 'default';
-let currentMinTraffic = null;
-let currentMaxTraffic = null;
-let currentMinSpeed = null;
-
-function matchesCriteria(s) {
   const plan = getBestPlan(s);
-  if (!plan) return false;
+  if (!plan) return null;
+  const price = parsePriceMonthly(plan.monthly);
   const traffic = parseTrafficMonthly(plan.traffic);
-  const speed = parseSpeed(s.speed);
-  if (currentMinTraffic !== null && traffic < currentMinTraffic) return false;
-  if (currentMaxTraffic !== null && traffic > currentMaxTraffic) return false;
-  if (currentMinSpeed !== null && speed < currentMinSpeed) return false;
-  return true;
+  if (!price || !traffic || traffic === Infinity) return null;
+  return traffic / price;
 }
