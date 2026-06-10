@@ -1538,6 +1538,12 @@ var testing = [
 
 // ============ HELPER FUNCTIONS ============
 
+// Sort/filter state (initialized here, used by index.html)
+var currentSort = 'default';
+var currentMinTraffic = null;
+var currentMaxTraffic = null;
+var currentMinSpeed = null;
+
 function parsePriceMonthly(str) {
   if (!str) return null;
   let m = str.match(/¥(\d+(?:\.\d+)?)/);
@@ -1591,4 +1597,50 @@ function getValueScore(s) {
   const traffic = parseTrafficMonthly(plan.traffic);
   if (!price || !traffic || traffic === Infinity) return null;
   return traffic / price;
+}
+
+// ===== FUNCTIONS FOR INDEX.HTML =====
+
+function getSortValue(s, key) {
+  if (key === 'price') {
+    const ppg = getPricePerGb(s);
+    return ppg !== null ? ppg : 9999;
+  }
+  if (key === 'traffic') {
+    const plan = getBestPlan(s);
+    if (!plan) return 0;
+    const t = parseTrafficMonthly(plan.traffic);
+    return t !== null ? t : 0;
+  }
+  if (key === 'speed') {
+    const spd = parseSpeed(s.speed);
+    return spd !== null ? spd : 0;
+  }
+  if (key === 'value') {
+    const vs = getValueScore(s);
+    return vs !== null ? vs : 0;
+  }
+  return 0;
+}
+
+function formatPricePerGb(s) {
+  const ppg = getPricePerGb(s);
+  if (ppg === null) return '—';
+  if (ppg === 0) return '0';
+  return '¥' + ppg.toFixed(2);
+}
+
+function formatValueScore(s) {
+  const vs = getValueScore(s);
+  if (vs === null) return '—';
+  return vs.toFixed(1);
+}
+
+function matchesCriteria(s) {
+  const traffic = getSortValue(s, 'traffic');
+  const speed = getSortValue(s, 'speed');
+  if (currentMinTraffic !== null && traffic < currentMinTraffic) return false;
+  if (currentMaxTraffic !== null && traffic > currentMaxTraffic) return false;
+  if (currentMinSpeed !== null && speed < currentMinSpeed) return false;
+  return true;
 }
