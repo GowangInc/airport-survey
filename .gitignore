@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor / IDE
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.old
+*.orig
+
+# Python (if any helper scripts added later)
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Node (if any build tools added later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build outputs (if any build step added later)
+dist/
+build/

@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airport Survey — Pricing, Traffic & Speeds</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --surface: #181a21;
+      --surface-hover: #1e2129;
+      --border: #2a2e3a;
+      --text: #e4e6eb;
+      --text-muted: #8b91a7;
+      --accent: #4f8cff;
+      --accent-dim: #3a6fd6;
+      --accent-glow: rgba(79, 140, 255, 0.15);
+      --tag-bg: #252a36;
+      --tag-text: #a0a8c0;
+      --highlight: rgba(79, 140, 255, 0.25);
+      --badge-top: #ff6b6b;
+      --badge-legacy: #ffd166;
+      --badge-new: #06d6a0;
+      --badge-payg: #118ab2;
+      --badge-custom: #9b5de5;
+      --success: #06d6a0;
+      --warn: #ffd166;
+      --nomatch-bg: rgba(255, 107, 107, 0.05);
+      --nomatch-border: rgba(255, 107, 107, 0.35);
+      --dim-text: rgba(228, 230, 235, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      background-color: rgba(24, 26, 33, 0.92);
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.02em;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .search-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.8rem;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .search-wrap input::placeholder { color: var(--text-muted); }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .stats-bar span b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .controls-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 140px;
+      z-index: 99;
+      backdrop-filter: blur(12px);
+      background-color: rgba(24, 26, 33, 0.92);
+    }
+
+    .controls-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .control-group label {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .sort-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sort-btn:hover, .sort-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .range-input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.35rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      width: 70px;
+      outline: none;
+    }
+
+    .range-input:focus {
+      border-color: var(--accent);
+    }
+
+    .card.nomatch {
+      border-color: var(--nomatch-border);
+      background: var(--nomatch-bg);
+      opacity: 0.65;
+      order: 9999;
+    }
+
+    .card.nomatch .card-name,
+    .card.nomatch .card-desc,
+    .card.nomatch .pricing-table td,
+    .card.nomatch .tag {
+      color: var(--dim-text);
+    }
+
+    .card.nomatch .price-highlight {
+      color: var(--dim-text);
+    }
+
+    main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 2.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section-title:first-of-type { margin-top: 0; }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.15rem 1.3rem;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+      border-color: var(--accent-dim);
+    }
+
+    .card.hidden { display: none; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .badge.top { background: rgba(255,107,107,0.18); color: var(--badge-top); border: 1px solid rgba(255,107,107,0.25); }
+    .badge.legacy { background: rgba(255,209,102,0.15); color: var(--badge-legacy); border: 1px solid rgba(255,209,102,0.2); }
+    .badge.new { background: rgba(6,214,160,0.15); color: var(--badge-new); border: 1px solid rgba(6,214,160,0.2); }
+    .badge.payg { background: rgba(17,138,178,0.15); color: var(--badge-payg); border: 1px solid rgba(17,138,178,0.2); }
+    .badge.custom { background: rgba(155,93,229,0.15); color: var(--badge-custom); border: 1px solid rgba(155,93,229,0.2); }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .pricing-table {
+      width: 100%;
+      font-size: 0.82rem;
+      border-collapse: collapse;
+      margin: 0.6rem 0 0.8rem;
+    }
+
+    .pricing-table th {
+      text-align: left;
+      padding: 0.35rem 0.5rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-table td {
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .pricing-table tr:last-child td { border-bottom: none; }
+
+    .price-highlight {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .speed-tag {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    .tag.highlighted {
+      background: var(--highlight);
+      color: var(--accent);
+    }
+
+    .tag.protocol { background: rgba(79,140,255,0.1); color: var(--accent); }
+    .tag.speed { background: rgba(255,209,102,0.12); color: var(--warn); }
+    .tag.price { background: rgba(6,214,160,0.12); color: var(--success); }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      display: none;
+    }
+
+    .no-results.visible { display: block; }
+
+    .filter-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+
+    .filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-dim);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .table-section { margin-top: 2rem; }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: 1rem;
+    }
+
+    .data-table th, .data-table td {
+      text-align: left;
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+    }
+
+    .data-table tr:hover td {
+      background: var(--surface-hover);
+    }
+
+    .data-table tr.hidden { display: none; }
+
+    mark {
+      background: var(--highlight);
+      color: var(--accent);
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+
+    .note-box {
+      background: rgba(255, 209, 102, 0.08);
+      border: 1px solid rgba(255, 209, 102, 0.2);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .note-box strong { color: var(--warn); }
+
+    @media (max-width: 768px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      header { padding: 1.2rem 1rem 1rem; }
+      header h1 { font-size: 1.3rem; }
+      .stats-bar { gap: 1rem; font-size: 0.75rem; }
+      .controls-bar { top: 120px; padding: 0.75rem 1rem; }
+      .controls-inner { gap: 0.6rem; }
+      .control-group { font-size: 0.78rem; }
+      .data-table { font-size: 0.8rem; }
+      .data-table th, .data-table td { padding: 0.5rem 0.5rem; }
+      .pricing-table { font-size: 0.75rem; }
+      .pricing-table th, .pricing-table td { padding: 0.25rem 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🛡️ Airport Survey</h1>
+  <p>Compare VPN / proxy services. Search by name, protocol, price, traffic limit, or speed.</p>
+  <div class="search-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="search" placeholder="Search services, prices, traffic, speeds..." autocomplete="off">
+  </div>
+</header>
+
+<div class="stats-bar">
+  <span><b id="count-total">0</b> total services</span>
+  <span><b id="count-matches">0</b> matching your criteria</span>
+</div>
+
+<div class="controls-bar">
+  <div class="controls-inner">
+    <div class="control-group">
+      <label>Sort:</label>
+      <button class="sort-btn active" data-sort="default" onclick="setSort('default')">Default</button>
+      <button class="sort-btn" data-sort="price" onclick="setSort('price')">Price ↓</button>
+      <button class="sort-btn" data-sort="traffic" onclick="setSort('traffic')">Traffic ↓</button>
+      <button class="sort-btn" data-sort="speed" onclick="setSort('speed')">Speed ↓</button>
+      <button class="sort-btn" data-sort="value" onclick="setSort('value')">Value ↓</button>
+    </div>
+    <div class="control-group">
+      <label>Min Traffic (GB/mo):</label>
+      <input type="number" class="range-input" id="min-traffic" value="" placeholder="0">
+      <label>Max:</label>
+      <input type="number" class="range-input" id="max-traffic" value="" placeholder="∞">
+    </div>
+    <div class="control-group">
+      <label>Min Speed (Mbps):</label>
+      <input type="number" class="range-input" id="min-speed" value="" placeholder="0">
+    </div>
+    <div class="control-group">
+      <button class="sort-btn" onclick="applyFilters()" style="font-weight:600">Apply</button>
+      <button class="sort-btn" onclick="resetFilters()" style="color:var(--text-muted)">Reset</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- COMBINED TOP + LEGACY -->
+  <h2 class="section-title"><span class="badge-dot" style="background:var(--badge-top)"></span> Top-Tier &amp; Established</h2>
+  <div class="note-box">
+    <strong>⚠️ Note:</strong> Prices may have changed since screenshots were taken. WgetCloud &amp; SSRDOG recently removed monthly options. Boost Net raised prices 20% in April 2026. Always verify on the official site before purchasing.
+  </div>
+  <div class="filter-row" id="combined-filters"></div>
+  <div class="cards-grid" id="combined-grid"></div>
+
+  <!-- NEW / TESTING -->
+  <h2 class="section-title"><span class="badge-dot" style="background:var(--badge-new)"></span> New / Testing</h2>
+  <div class="filter-row" id="new-filters"></div>
+  <div class="cards-grid" id="new-grid"></div>
+
+  <div class="no-results" id="no-results">
+    <p style="font-size:1.1rem; margin-bottom:0.5rem">🔍 No services match your search.</p>
+    <p>Try different keywords or clear the search box.</p>
+  </div>
+
+  <!-- FULL COMPARISON TABLE -->
+  <div class="table-section">
+    <h2 class="section-title">📊 Full Comparison Table</h2>
+    <table class="data-table" id="full-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>From</th>
+          <th>Traffic</th>
+          <th>Speed</th>
+          <th>¥/GB</th>
+          <th>Value</th>
+          <th>Protocols</th>
+          <th>Payment</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<script src="data.js"></script>
+<script>
+// ===== RENDER =====
+function makePricingTable(pricing) {
+  if (!pricing || pricing.length === 0) return '';
+  const rows = pricing.map(p => `
+    <tr>
+      <td><b>${p.name}</b></td>
+      <td class="price-highlight">${p.monthly}</td>
+      <td>${p.traffic}</td>
+      <td style="color:var(--text-muted);font-size:0.75rem">${p.notes}</td>
+    </tr>
+  `).join('');
+  return `
+    <table class="pricing-table">
+      <thead><tr><th>Plan</th><th>Price</th><th>Traffic</th><th>Details</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function makeCard(s) {
+  const tierBadge = s.tier === 'top' ? '<span class="badge top">Top</span>' :
+                    s.tier === 'legacy' ? '<span class="badge legacy">Legacy</span>' :
+                    '<span class="badge new">New</span>';
+
+  const customBadge = s.tags.includes("custom client") ? '<span class="badge custom">Custom App</span>' : '';
+
+  const protoTags = s.protocols.map(p => `<span class="tag protocol">${p}</span>`).join('');
+  const otherTags = s.tags.filter(t => !s.protocols.includes(t) && t !== "custom client")
+    .map(t => `<span class="tag">${t}</span>`).join('');
+
+  const pricingTable = s.pricing ? makePricingTable(s.pricing) : '';
+  const speedTag = s.speed ? `<span class="tag speed">⚡ ${s.speed}</span>` : '';
+  const paymentTag = s.payment ? `<span class="tag price">💳 ${s.payment}</span>` : '';
+  const restrictionNote = s.restrictions ? `<div style="color:var(--warn);font-size:0.78rem;margin-top:0.4rem">⚠️ ${s.restrictions}</div>` : '';
+  const nodesTag = s.nodes ? `<span class="tag">🌐 ${s.nodes}</span>` : '';
+
+  return `
+    <div class="card" data-search="${(s.name + ' ' + s.nameZh + ' ' + s.desc + ' ' + s.descZh + ' ' + s.protocols.join(' ') + ' ' + s.tags.join(' ') + ' ' + (s.payment || '') + ' ' + (s.speed || '') + ' ' + (s.nodes || '') + ' ' + (s.restrictions || '')).toLowerCase()}"
+         data-sort-price="${getSortValue(s, 'price')}" data-sort-traffic="${getSortValue(s, 'traffic')}" data-sort-speed="${getSortValue(s, 'speed')}">
+      <div class="card-header">
+        <div>
+          <div class="card-name">${s.name}</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:2px">${s.nameZh}</div>
+        </div>
+        <div class="card-badges">${tierBadge}${customBadge}</div>
+      </div>
+      <div class="card-desc">${s.desc}</div>
+      ${pricingTable}
+      ${restrictionNote}
+      <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap">
+        <span class="tag price" title="Price per GB (lower is better)">📊 ${formatPricePerGb(s)}</span>
+        <span class="tag" style="background:rgba(6,214,160,0.12);color:var(--success)" title="Value score (higher is better)">💰 ${formatValueScore(s)}</span>
+      </div>
+      <div class="card-meta">${protoTags}${speedTag}${paymentTag}${nodesTag}${otherTags}</div>
+    </div>
+  `;
+}
+
+function render() {
+  const combined = [...top8.map(s => ({...s, tier: 'top'})), ...legacy.map(s => ({...s, tier: 'legacy'}))];
+  let sortedCombined = [...combined];
+  let sortedTesting = [...testing.map(s => ({...s, tier: 'new'}))];
+
+  if (currentSort !== 'default') {
+    const sortFn = (a, b) => {
+      const av = getSortValue(a, currentSort);
+      const bv = getSortValue(b, currentSort);
+      if (currentSort === 'price') return av - bv;
+      return bv - av;
+    };
+    sortedCombined.sort(sortFn);
+    sortedTesting.sort(sortFn);
+  }
+
+  document.getElementById('combined-grid').innerHTML = sortedCombined.map(makeCard).join('');
+  document.getElementById('new-grid').innerHTML = sortedTesting.map(makeCard).join('');
+
+  const grid = document.getElementById('combined-grid');
+  const cards = Array.from(grid.querySelectorAll('.card'));
+  const filtersActive = currentMinTraffic !== null || currentMaxTraffic !== null || currentMinSpeed !== null;
+
+  cards.forEach(card => {
+    const traffic = parseFloat(card.dataset.sortTraffic);
+    const speed = parseFloat(card.dataset.sortSpeed);
+    let matches = true;
+    if (currentMinTraffic !== null && traffic < currentMinTraffic) matches = false;
+    if (currentMaxTraffic !== null && traffic > currentMaxTraffic) matches = false;
+    if (currentMinSpeed !== null && speed < currentMinSpeed) matches = false;
+
+    if (filtersActive && !matches) {
+      card.classList.add('nomatch');
+      card.style.order = '1';
+    } else {
+      card.classList.remove('nomatch');
+      card.style.order = '0';
+    }
+  });
+
+  const matching = cards.filter(c => !c.classList.contains('nomatch'));
+  const nonMatching = cards.filter(c => c.classList.contains('nomatch'));
+  matching.forEach(c => grid.appendChild(c));
+  nonMatching.forEach(c => grid.appendChild(c));
+
+  document.getElementById('table-body').innerHTML = allData.map(s => {
+    const plan = getBestPlan(s);
+    const cheapest = plan ? plan.monthly : 'N/A';
+    const traffic = plan ? plan.traffic : '—';
+    return `
+    <tr data-search="${(s.name + ' ' + s.nameZh + ' ' + s.desc + ' ' + s.descZh + ' ' + s.protocols.join(' ') + ' ' + s.tags.join(' ') + ' ' + (s.payment || '') + ' ' + (s.speed || '')).toLowerCase()}">
+      <td><b>${s.name}</b><br><small style="color:var(--text-muted)">${s.nameZh}</small></td>
+      <td>${cheapest}</td>
+      <td>${traffic}</td>
+      <td>${s.speed || '—'}</td>
+      <td>${formatPricePerGb(s)}</td>
+      <td>${formatValueScore(s)}</td>
+      <td>${s.protocols.map(p => `<span class="tag protocol">${p}</span>`).join(' ')}</td>
+      <td>${s.payment || '—'}</td>
+    </tr>
+  `}).join('');
+
+  document.getElementById('count-total').textContent = allData.length;
+  const matchCount = combined.filter(matchesCriteria).length;
+  document.getElementById('count-matches').textContent = matchCount;
+}
+
+// ===== SORT & FILTER CONTROLS =====
+function setSort(key) {
+  currentSort = key;
+  document.querySelectorAll('.sort-btn[data-sort]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.sort === key);
+  });
+  render();
+}
+
+function applyFilters() {
+  const minT = document.getElementById('min-traffic').value;
+  const maxT = document.getElementById('max-traffic').value;
+  const minS = document.getElementById('min-speed').value;
+  currentMinTraffic = minT ? parseFloat(minT) : null;
+  currentMaxTraffic = maxT ? parseFloat(maxT) : null;
+  currentMinSpeed = minS ? parseFloat(minS) : null;
+  render();
+  doSearch();
+}
+
+function resetFilters() {
+  document.getElementById('min-traffic').value = '';
+  document.getElementById('max-traffic').value = '';
+  document.getElementById('min-speed').value = '';
+  currentMinTraffic = null;
+  currentMaxTraffic = null;
+  currentMinSpeed = null;
+  render();
+  doSearch();
+}
+
+// ===== SEARCH =====
+const searchInput = document.getElementById('search');
+const noResults = document.getElementById('no-results');
+
+function doSearch() {
+  const q = searchInput.value.trim().toLowerCase();
+  let anyVisible = false;
+
+  document.querySelectorAll('.card').forEach(card => {
+    const match = !q || card.dataset.search.includes(q);
+    card.classList.toggle('hidden', !match);
+    if (match && !card.classList.contains('hidden')) anyVisible = true;
+  });
+
+  document.querySelectorAll('#table-body tr').forEach(row => {
+    const match = !q || row.dataset.search.includes(q);
+    row.classList.toggle('hidden', !match);
+  });
+
+  noResults.classList.toggle('visible', q.length > 0 && !anyVisible);
+}
+
+searchInput.addEventListener('input', doSearch);
+
+// ===== PROTOCOL FILTER BUTTONS =====
+function makeFilterButtons(containerId, items, key) {
+  const container = document.getElementById(containerId);
+  const allValues = [...new Set(items.flatMap(i => i[key]))].sort();
+  container.innerHTML = '<button class="filter-btn active" data-filter="">All</button>' +
+    allValues.map(v => `<button class="filter-btn" data-filter="${v.toLowerCase()}">${v}</button>`).join('');
+}
+
+function attachFilters(containerId, gridId) {
+  const container = document.getElementById(containerId);
+  container.addEventListener('click', e => {
+    if (!e.target.classList.contains('filter-btn')) return;
+    container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    const f = e.target.dataset.filter;
+    document.querySelectorAll(`#${gridId} .card`).forEach(card => {
+      card.classList.toggle('hidden', f && !card.dataset.search.includes(f));
+    });
+  });
+}
+
+// ===== INIT =====
+render();
+
+const combinedForFilters = [...top8, ...legacy];
+makeFilterButtons('combined-filters', combinedForFilters, 'protocols');
+makeFilterButtons('new-filters', testing, 'protocols');
+attachFilters('combined-filters', 'combined-grid');
+attachFilters('new-filters', 'new-grid');
+</script>
+</body>
+</html>
